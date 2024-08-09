@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `Usuario` (
   `apellido` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `pass` CHAR(64) NOT NULL,
-  `Saldo` FLOAT NOT NULL,
+  `Saldo` DECIMAL(8.8) NOT NULL,
   PRIMARY KEY (`idUsuario`),
   UNIQUE INDEX `idUsuario_UNIQUE` (`idUsuario` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -36,7 +36,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Moneda` (
   `idMoneda` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `precio` DECIMAL NOT NULL,
-  `cantidad` INT NOT NULL,
+  `cantidad` DECIMAL(8.8) NOT NULL,
   `nombre` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idMoneda`),
   UNIQUE INDEX `idMoneda_UNIQUE` (`idMoneda` ASC) VISIBLE)
@@ -49,7 +49,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `UsuarioMoneda` (
   `idUsuario` INT UNSIGNED NOT NULL,
   `idMoneda` INT UNSIGNED NOT NULL,
-  `cantidad` FLOAT NOT NULL,
+  `cantidad` DECIMAL(8.8) NOT NULL,
   PRIMARY KEY (`idUsuario`, `idMoneda`),
   INDEX `fk_BilleteraMoneda_Moneda1_idx` (`idMoneda` ASC) VISIBLE,
   INDEX `fk_BilleteraMoneda_Usuario1_idx` (`idUsuario` ASC) VISIBLE,
@@ -71,7 +71,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Historial` (
   `idMoneda` INT UNSIGNED NOT NULL,
-  `cantidad` FLOAT UNSIGNED NULL,
+  `cantidad` DECIMAL(8.8) UNSIGNED NULL,
   `fechaHora` DATETIME NOT NULL,
   `accion` TINYINT UNSIGNED NOT NULL,
   `idUsuario` INT UNSIGNED NOT NULL,
