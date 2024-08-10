@@ -11,7 +11,7 @@
 
 # MarketWeight
 
-MarketWeight permite a los usuarios visualizar gráficamente la oferta y demanda de distintas criptomonedas a través de una iterfaz sencilla y gráficos que reflejan las transacciones. Todos estos datos son almacenados en una base de datos relacional escrita en MySQL. El objetivo de la aplicación es facilitar el análisis y tomar decisiones acertadas sobre el comportamiento del mercado.
+MarketWeight permite a los usuarios visualizar gráficamente la oferta y demanda de distintas criptomonedas a través de una iterfaz sencilla y gráficos que reflejan las transacciones. Todos estos datos son almacenados en una base de datos relacional escrita en MySQL. El objetivo de la aplicación es facilitar el análisis y la toma de decisiones sobre el comportamiento del mercado.
 
 ## Comenzando 🚀
 
@@ -40,11 +40,11 @@ Usamos [SemVer](http://semver.org/) para el versionado. Para todas las versiones
 
 ## Autores ✒️
 
-- **Carlos Bello** - Desarrollo C#. [carlete-afk](https://github.com/carlete-afk)
-- **Walter Benítez** - Desarrollo BD. [Walter-Cooking](https://github.com/Walter-Cooking)
-- **Jorge Casco** - Desarrollo BD. [jorge-link](https://github.com/jorge-link)
-- **Guido Gavilán** - Desarrollo C#. [guido-rar](https://github.com/guido-rar)
-- **Francisco García** - Desarrollo BD [SirFrancis2007](https://github.com/SirFrancis2007) 
+- **Carlos Bello** - [carlete-afk](https://github.com/carlete-afk)
+- **Walter Benítez** - [Walter-Cooking](https://github.com/Walter-Cooking)
+- **Jorge Casco** - [jorge-link](https://github.com/jorge-link)
+- **Guido Gavilán** - [guido-rar](https://github.com/guido-rar)
+- **Francisco García** - [SirFrancis2007](https://github.com/SirFrancis2007) 
 
 ## Licencia 📄
 
