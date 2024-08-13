@@ -7,11 +7,11 @@ class Program
 {
     public static void Main() {
 
-        do {
-
+        do{
+            
             Menu.ImprimirPantallaPrincipal();
 
-        } while ( MarketWeight.salir == false );
+        } while (MarketWeight.salir == false);
     
     }
 }
