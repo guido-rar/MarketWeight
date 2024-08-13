@@ -11,7 +11,7 @@ END $$
 DROP PROCEDURE IF EXISTS AltaUsuario $$
 CREATE PROCEDURE `AltaUsuario`(xnombre VARCHAR(45), xapellido  VARCHAR(45), xemail  VARCHAR(45), xpass CHAR(64) )
 BEGIN
-       INSERT INTO `Usuario` (nombre, apellido, email, pass, Saldo)
+       INSERT INTO `Usuario` (nombre, apellido, email, pass, saldo)
            VALUES(xnombre, xapellido, xemail, xpass, 0.0);
 END $$
 
@@ -39,4 +39,13 @@ BEGIN
        SET cantidad =- xcantidad
        WHERE idMoneda = xidmoneda
        AND idUsuario = xidusuario;
+END $$
+
+
+
+DROP PROCEDURE IF EXISTS AltaHistorial $$
+CREATE PROCEDURE `AltaHistorial`(xidMoneda INT UNSIGNED, xcantidad DECIMAL(8.8) UNSIGNED, xaccion TINYINT UNSIGNED, xidUsuario INT UNSIGNED)
+BEGIN
+       INSERT INTO `Historial` (idMoneda, cantidad, fechaHora, accion, idUsuario)
+           VALUES(xidMoneda, xcantidad, NOW(), xaccion, xidUsuario);
 END $$
