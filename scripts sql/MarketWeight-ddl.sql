@@ -5,15 +5,15 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema 5to_Trinance
+-- Schema 5to_MarketWeight
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `5to_Trinance` ;
+DROP SCHEMA IF EXISTS `5to_MarketWeight` ;
 
 -- -----------------------------------------------------
--- Schema 5to_Trinance
+-- Schema 5to_MarketWeight
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `5to_Trinance` ;
-USE `5to_Trinance` ;
+CREATE SCHEMA IF NOT EXISTS `5to_MarketWeight` ;
+USE `5to_MarketWeight` ;
 
 -- -----------------------------------------------------
 -- Table `Usuario`
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `Usuario` (
   `apellido` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `pass` CHAR(64) NOT NULL,
-  `Saldo` DECIMAL(8.8) NOT NULL,
+  `saldo` DECIMAL(8.8) NOT NULL,
   PRIMARY KEY (`idUsuario`),
   UNIQUE INDEX `idUsuario_UNIQUE` (`idUsuario` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -70,12 +70,13 @@ ENGINE = InnoDB;
 -- Table `Historial`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Historial` (
+  `idHistorial` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `idMoneda` INT UNSIGNED NOT NULL,
   `cantidad` DECIMAL(8.8) UNSIGNED NULL,
   `fechaHora` DATETIME NOT NULL,
   `accion` TINYINT UNSIGNED NOT NULL,
   `idUsuario` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`idMoneda`, `idUsuario`),
+  PRIMARY KEY (`idHistorial`, `idMoneda`, `idUsuario`),
   INDEX `fk_Historial_Moneda1_idx` (`idMoneda` ASC) VISIBLE,
   UNIQUE INDEX `idMoneda_UNIQUE` (`idMoneda` ASC) VISIBLE,
   INDEX `fk_Historial_Usuario1_idx` (`idUsuario` ASC) VISIBLE,
@@ -91,11 +92,11 @@ CREATE TABLE IF NOT EXISTS `Historial` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-USE `5to_Trinance`;
+USE `5to_MarketWeight`;
 
 DELIMITER $$
-USE `5to_Trinance`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `5to_Trinance`.`Usuario_BEFORE_INSERT` BEFORE INSERT ON `Usuario` FOR EACH ROW
+USE `5to_MarketWeight`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `5to_MarketWeight`.`Usuario_BEFORE_INSERT` BEFORE INSERT ON `Usuario` FOR EACH ROW
 BEGIN
 
 END

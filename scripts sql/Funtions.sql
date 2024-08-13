@@ -1,5 +1,6 @@
+USE 5to_MarketWeight $$
 DELIMITER $$
-DROP FUNCTION PrecioCompra;
+DROP FUNCTION IF EXISTS PrecioCompra $$
 CREATE DEFINER=`5to_agbd`@`localhost` FUNCTION `PrecioCompra`(xcantidad INT, xidmoneda INT UNSIGNED) RETURNS float
     READS SQL DATA
 BEGIN

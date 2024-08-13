@@ -1,19 +1,20 @@
+USE 5to_MarketWeight $$
 DELIMITER $$
-
-DROP TRIGGER `aftAltaPass`;
-CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `aftAltaPass` AFTER INSERT ON `Usuario` FOR EACH ROW BEGIN 
+DROP TRIGGER IF EXISTS `aftAltaPass` $$
+CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `aftAltaPass` AFTER INSERT ON `Usuario` FOR EACH ROW 
+BEGIN 
     UPDATE Usuario 
-    SET NEW.pass = SHA2 (NEW.pass, 256)
+    SET new.pass = SHA2 (NEW.pass, 256)
     WHERE idUsuario = NEW.idUsuario;
 END $$
 
-DROP TRIGGER `BefAltaUsuario`;
+DROP TRIGGER IF EXISTS `BefAltaUsuario`$$
 CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefAltaUsuario` BEFORE INSERT ON `Usuario` FOR EACH ROW BEGIN
         INSERT INTO Billetera (saldo)
         VALUES (0);
 END $$
 
-DROP TRIGGER `BefComprarMoneda`;
+DROP TRIGGER IF EXISTS `BefComprarMoneda`$$
 CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefComprarMoneda` BEFORE UPDATE ON `UsuarioMoneda` FOR EACH ROW BEGIN
         IF NOT (EXISTS (
             SELECT *
@@ -26,7 +27,7 @@ CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefComprarMoneda` BEFORE UPDATE O
         END IF;
 END $$
 
-DROP TRIGGER `BefVenderMoneda`;
+DROP TRIGGER IF EXISTS `BefVenderMoneda`$$
 CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefVenderMoneda` BEFORE UPDATE ON `UsuarioMoneda` FOR EACH ROW BEGIN
         SELECT cantidad INTO @xcantidad
         FROM `UsuarioMoneda`
@@ -38,13 +39,14 @@ CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefVenderMoneda` BEFORE UPDATE ON
         END IF;
 END $$
 
-DROP TRIGGER `Usuario_BEFORE_INSERT`;
+DROP TRIGGER IF EXISTS `Usuario_BEFORE_INSERT`$$
 CREATE  TRIGGER `Usuario_BEFORE_INSERT` BEFORE INSERT ON `Usuario` FOR EACH ROW BEGIN
     IF(EXISTS(
         SELECT *
         FROM Usuario
         WHERE email = NEW.email
     ))THEN
-    SIGNAL SQLSTATE '45000'
-    SET MESSAGE_TEXT = "Email ya registrado.";
-END
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = "Email ya registrado.";
+    END IF;
+END $$

@@ -1,19 +1,21 @@
+USE 5to_MarketWeight;
+
 DELIMITER $$
-DROP PROCEDURE AltaCriptoMoneda;
+DROP PROCEDURE IF EXISTS AltaCriptoMoneda $$
 CREATE PROCEDURE `AltaCriptoMoneda`(xprecio FLOAT, xcantidad DECIMAL(8.8), xnombre VARCHAR(45))
 BEGIN
    INSERT INTO `Moneda` (precio, cantidad, nombre)
            VALUES(xprecio, xcantidad, xnombre);
 END $$
 
-DROP PROCEDURE AltaUsuario;
+DROP PROCEDURE IF EXISTS AltaUsuario $$
 CREATE PROCEDURE `AltaUsuario`(xnombre VARCHAR(45), xapellido  VARCHAR(45), xemail  VARCHAR(45), xpass CHAR(64) )
 BEGIN
        INSERT INTO `Usuario` (nombre, apellido, email, pass, Saldo)
            VALUES(xnombre, xapellido, xemail, xpass, 0.0);
 END $$
 
-DROP PROCEDURE ComprarMoneda;
+DROP PROCEDURE IF EXISTS ComprarMoneda $$
 CREATE PROCEDURE `ComprarMoneda`(xidusuario INT UNSIGNED,xcantidad INT, xidmoneda INT UNSIGNED)
 BEGIN
        UPDATE UsuarioMoneda
@@ -22,7 +24,7 @@ BEGIN
        AND idUsuario = xidusuario;
 END $$
 
-DROP PROCEDURE IngresarDinero;
+DROP PROCEDURE IF EXISTS IngresarDinero $$
 CREATE PROCEDURE `IngresarDinero`(xidUsuario INT UNSIGNED, xsaldo FLOAT)
 BEGIN 
     UPDATE Usuario 
@@ -30,7 +32,7 @@ BEGIN
     WHERE `idUsuario` = xidUsuario;
 END $$
 
-DROP PROCEDURE VenderMoneda;
+DROP PROCEDURE IF EXISTS VenderMoneda $$
 CREATE PROCEDURE `VenderMoneda`(xidusuario INT UNSIGNED, xidmoneda INT UNSIGNED, xcantidad FLOAT)
 BEGIN
        UPDATE UsuarioMoneda
