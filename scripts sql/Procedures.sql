@@ -16,10 +16,10 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS ComprarMoneda $$
-CREATE PROCEDURE `ComprarMoneda`(xidusuario INT UNSIGNED,xcantidad INT, xidmoneda INT UNSIGNED)
+CREATE PROCEDURE `ComprarMoneda`(xidusuario INT UNSIGNED,xcantidad DECIMAL(8.8), xidmoneda INT UNSIGNED)
 BEGIN
        UPDATE UsuarioMoneda
-       SET cantidad =+ xcantidad
+       SET cantidad = cantidad + xcantidad
        WHERE idMoneda = xidmoneda
        AND idUsuario = xidusuario;
 END $$
@@ -28,7 +28,7 @@ DROP PROCEDURE IF EXISTS IngresarDinero $$
 CREATE PROCEDURE `IngresarDinero`(xidUsuario INT UNSIGNED, xsaldo FLOAT)
 BEGIN 
     UPDATE Usuario 
-    SET Saldo =+ xsaldo
+    SET Saldo = saldo + xsaldo
     WHERE `idUsuario` = xidUsuario;
 END $$
 
@@ -36,7 +36,7 @@ DROP PROCEDURE IF EXISTS VenderMoneda $$
 CREATE PROCEDURE `VenderMoneda`(xidusuario INT UNSIGNED, xidmoneda INT UNSIGNED, xcantidad FLOAT)
 BEGIN
        UPDATE UsuarioMoneda
-       SET cantidad =- xcantidad
+       SET cantidad = cantidad - xcantidad
        WHERE idMoneda = xidmoneda
        AND idUsuario = xidusuario;
 END $$

@@ -6,12 +6,10 @@ DELIMITER $$
 
     
     DROP TRIGGER IF EXISTS `aftAltaPass` $$
-    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `aftAltaPass` AFTER INSERT ON `Usuario` 
+    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `aftAltaPass` BEFORE INSERT ON `Usuario` 
     FOR EACH ROW 
-    BEGIN 
-        UPDATE Usuario 
-        SET new.pass = SHA2(NEW.pass, 256)
-        WHERE idUsuario = NEW.idUsuario;
+    BEGIN   
+        SET new.pass = SHA2(NEW.pass, 256);
     END $$ 
     
 
@@ -41,13 +39,13 @@ DELIMITER $$
     FOR EACH ROW 
     BEGIN
             SELECT saldo INTO @xsaldo
-            FROM `UsuarioMoneda`
+            FROM Usuario
             WHERE `idUsuario` = NEW.`idUsuario`;
             
             IF (@xsaldo >= PrecioCompra(NEW.cantidad, NEW.idMoneda))
             THEN 
                 UPDATE Usuario
-                SET saldo =- PrecioCompra(NEW.cantidad, NEW.idMoneda)
+                SET saldo = saldo - PrecioCompra(NEW.cantidad, NEW.idMoneda)
                 WHERE idUsuario = xidusuario;
             
                 INSERT INTO Historial (idMoneda, cantidad, fechaHora, accion, idUsuario)
@@ -90,7 +88,7 @@ DELIMITER $$
                 SET MESSAGE_TEXT = "Cantidad Insuficiente!";
             ELSE
                 UPDATE Usuario
-                SET saldo =+ PrecioCompra(NEW.cantidad, NEW.idMoneda)
+                SET saldo = saldo + PrecioCompra(NEW.cantidad, NEW.idMoneda)
                 WHERE idUsuario = new.idUsuario;
 
                 INSERT INTO Historial (idMoneda, cantidad, fechaHora, accion, idUsuario)

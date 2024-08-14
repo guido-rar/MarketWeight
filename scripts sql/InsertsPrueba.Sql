@@ -23,3 +23,9 @@ CALL AltaUsuario('Sofía', 'Hernández', 'sofia.hernandez@example.com', '1234567
 CALL AltaUsuario('Daniel', 'Pérez', 'daniel.perez@example.com', '1q2w3e4r');
 CALL AltaUsuario('María', 'Torres', 'maria.torres@example.com', 'letmein1');
 CALL AltaUsuario('Javier', 'Ramírez', 'javier.ramirez@example.com', 'welcome1');
+
+CALL IngresarDinero(2, 0);
+CALL IngresarDinero(3, 10000);
+CALL IngresarDinero(2, 10000);
+
+CALL ComprarMoneda(2, 1.0 ,4);
