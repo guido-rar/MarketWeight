@@ -5,7 +5,7 @@ class Menu
 {
     private static ConsoleKey _tecla;
     private static int _opcionActual = 0;
-    private static string[] _opciones = ["Iniciar sesión", "Registrarse", "Mostrar Lista de Monedas", "Salir"];
+    private static string[] _opciones = ["Calcular", "Mostrar Lista de Monedas (proximamente)", "Salir"];
     internal static string Centrar(string text)
     {
         string[] lines = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
@@ -90,22 +90,21 @@ class Menu
             switch(_opcionActual)
             {
                 case 0:
-                    // ImprimirInicioSesion();
+                    MarketWeight.salir = true;
+                    ImprimirPedido();
                 break;
                 
                 case 1:
-                    ImprimirRegistro();
+                    //IMprimir REgistro de calculos realizados.
                 break;
 
                 case 2:
-                    // ImprimirListaCrypto();
-                break;
-
-                case 3:
                     Console.Clear();
-                    Console.WriteLine("\n\n\n\n\n\n\n\n\n\n");
-                    Console.WriteLine(Centrar("Adios!"));
-                    Console.WriteLine("\n\n\n\n\n\n\n\n\n\n");
+                    Console.WriteLine("\n\n\n");
+                    Console.WriteLine(Centrar("Adios!!!"));
+                    Console.WriteLine(Centrar("Gracias por utilizar nuestros servicios."));
+                    Console.WriteLine("\n\n\n");
+                    MarketWeight.salir = true;
                 break;
 
                 default:
@@ -168,10 +167,78 @@ class Menu
         foreach (string x in datos)
             Console.Write($"{x}, ");
 
-        Thread.Sleep(5000);
+        Thread.Sleep(2000);
 
         Console.ForegroundColor = ConsoleColor.DarkGray;
 
         Console.WriteLine(ASCII.Creditos);
+    }
+
+    /*Pedido de datos*/
+
+    internal static void ImprimirPedido ()
+    {
+        ImprimirTitulo();
+
+                    MarketWeight.salir = true;        string[] inputs = ["Nombre del producto", "Cantidad Oferta", "Cantidad Demanda", "Precio Oferta", "Precio Demanda"];
+        string[] datos = new string[inputs.Length];
+
+        for (int i = 0; i < inputs.Length; i++)
+        {
+            Console.Write(Centrar($"{inputs[i]}: "));
+            datos[i] = Console.ReadLine();
+        }
+
+        decimal cantidadOferta = decimal.Parse(datos[1]);
+        decimal cantidadDemanda = decimal.Parse(datos[2]);
+        decimal precioOferta = decimal.Parse(datos[3]);
+        decimal precioDemanda = decimal.Parse(datos[4]);
+        
+
+        MostrarResultados(cantidadOferta, cantidadDemanda, precioOferta, precioDemanda);
+    }
+
+    /*Metodo de calculo de propiedades*/
+
+    internal static decimal CalcularPuntoEquilibrio(decimal cantOferta, decimal cantDemanda, decimal pOferta, decimal pDemanda)
+    {
+        return (cantDemanda - cantOferta) / (pOferta + pDemanda);
+    }
+
+    // Método para calcular oferta
+    internal static decimal CalcularOferta(decimal cantOferta, decimal pOferta, decimal puntoEquilibrio)
+    {
+        return (pOferta * puntoEquilibrio) - cantOferta;
+    }
+
+    // Método para calcular demanda
+    internal static decimal CalcularDemanda(decimal cantDemanda, decimal pDemanda, decimal puntoEquilibrio)
+    {
+        return (pDemanda * puntoEquilibrio) - cantDemanda;
+    }
+
+    /*Muestra de resultados*/
+
+    internal static void MostrarResultados(decimal cantOferta, decimal cantDemanda, decimal pOferta, decimal pDemanda)
+    {
+        ImprimirTitulo();
+
+        decimal puntoEquilibrio = CalcularPuntoEquilibrio(cantOferta, cantDemanda, pOferta, pDemanda);
+        decimal oferta = CalcularOferta(cantOferta, pOferta, puntoEquilibrio);
+        decimal demanda = CalcularDemanda(cantDemanda, pDemanda, puntoEquilibrio);
+
+        Console.WriteLine(Centrar("Resultados Finales:"));
+        Console.WriteLine(Centrar($"Precio de Demanda: {pDemanda} | Precio de Oferta: {pOferta}"));
+        Console.WriteLine(Centrar($"Demanda: {demanda} | Oferta: {oferta} | Precio de Equilibrio: {puntoEquilibrio}"));
+        
+        Console.WriteLine("\n\n");
+
+        Console.WriteLine(Centrar("Presione [Enter] para volver al inicio."));
+
+        if(EscucharTeclado() == ConsoleKey.Enter)
+        {
+            MarketWeight.salir = false;
+            MarketWeight.BuclePantallaPrincipal();
+        }
     }
 }
