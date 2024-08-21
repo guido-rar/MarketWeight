@@ -180,7 +180,8 @@ class Menu
     {
         ImprimirTitulo();
 
-                    MarketWeight.salir = true;        string[] inputs = ["Nombre del producto", "Cantidad Oferta", "Cantidad Demanda", "Precio Oferta", "Precio Demanda"];
+        MarketWeight.salir = true;        
+        string[] inputs = ["Nombre del producto", "Cantidad Oferta", "Cantidad Demanda", "Precio Oferta", "Precio Demanda"];
         string[] datos = new string[inputs.Length];
 
         for (int i = 0; i < inputs.Length; i++)
@@ -189,13 +190,14 @@ class Menu
             datos[i] = Console.ReadLine();
         }
 
+        string  NombreActivo = (datos[0]);
         decimal cantidadOferta = decimal.Parse(datos[1]);
         decimal cantidadDemanda = decimal.Parse(datos[2]);
         decimal precioOferta = decimal.Parse(datos[3]);
         decimal precioDemanda = decimal.Parse(datos[4]);
         
 
-        MostrarResultados(cantidadOferta, cantidadDemanda, precioOferta, precioDemanda);
+        MostrarResultados(NombreActivo, cantidadOferta, cantidadDemanda, precioOferta, precioDemanda);
     }
 
     /*Metodo de calculo de propiedades*/
@@ -208,18 +210,33 @@ class Menu
     // Método para calcular oferta
     internal static decimal CalcularOferta(decimal cantOferta, decimal pOferta, decimal puntoEquilibrio)
     {
-        return (pOferta * puntoEquilibrio) - cantOferta;
+        return cantOferta + (pOferta * puntoEquilibrio);
     }
 
     // Método para calcular demanda
     internal static decimal CalcularDemanda(decimal cantDemanda, decimal pDemanda, decimal puntoEquilibrio)
     {
-        return (pDemanda * puntoEquilibrio) - cantDemanda;
+        return cantDemanda - (pDemanda * puntoEquilibrio);
+    }
+
+    internal static string  PropiedadMercado (decimal cantDemanda, decimal cantOferta)
+    {
+        if(cantDemanda > cantOferta)
+        {
+            return "    ↓  Activo en baja";
+        }
+
+        if(cantDemanda < cantOferta)
+        {
+            return "    ↑  Activo en alza";
+        } 
+
+        return "    =  Activo igual";
     }
 
     /*Muestra de resultados*/
 
-    internal static void MostrarResultados(decimal cantOferta, decimal cantDemanda, decimal pOferta, decimal pDemanda)
+    internal static void MostrarResultados(string NActivo, decimal cantOferta, decimal cantDemanda, decimal pOferta, decimal pDemanda)
     {
         ImprimirTitulo();
 
@@ -228,8 +245,11 @@ class Menu
         decimal demanda = CalcularDemanda(cantDemanda, pDemanda, puntoEquilibrio);
 
         Console.WriteLine(Centrar("Resultados Finales:"));
-        Console.WriteLine(Centrar($"Precio de Demanda: {pDemanda} | Precio de Oferta: {pOferta}"));
-        Console.WriteLine(Centrar($"Demanda: {demanda} | Oferta: {oferta} | Precio de Equilibrio: {puntoEquilibrio}"));
+        Console.WriteLine(Centrar(""));
+        Console.WriteLine(Centrar($"Nombre del Activo:" + NActivo));
+        Console.WriteLine(Centrar($"Precio de Demanda: " + pDemanda.ToString("F2") + "  | Precio de Oferta: "  + pOferta.ToString("F2")));
+        Console.WriteLine(Centrar("Volumen de Bien: " + demanda.ToString("F2") + "      | Precio de Equilibrio: " + puntoEquilibrio.ToString("F2")));
+        Console.WriteLine(Centrar("El resultado es:" + PropiedadMercado(cantDemanda, cantOferta)));
         
         Console.WriteLine("\n\n");
 
