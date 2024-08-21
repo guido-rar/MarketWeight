@@ -226,15 +226,15 @@ class Menu
     {
         if(cantDemanda > cantOferta)
         {
-            return "    ↓  Activo en baja";
+            return "\t↓  Activo en baja";
         }
 
         if(cantDemanda < cantOferta)
         {
-            return "    ↑  Activo en alza";
+            return "\t↑  Activo en alza";
         } 
 
-        return "    =  Activo igual";
+        return "\tActivo en punto de Equilibrio";
     }
 
     /*Muestra de resultados*/
@@ -249,7 +249,7 @@ class Menu
 
         Console.WriteLine(Centrar("Resultados Finales:"));
         Console.WriteLine(Centrar(""));
-        Console.WriteLine(Centrar($"Nombre del Activo:" + NActivo));
+        Console.WriteLine(Centrar($"Nombre del Activo: " + NActivo));
         Console.WriteLine(Centrar($"Precio de Demanda: " + pDemanda.ToString("F2") + "  | Precio de Oferta: "  + pOferta.ToString("F2")));
         Console.WriteLine(Centrar("Volumen de Bien: " + demanda.ToString("F2") + "      | Precio de Equilibrio: " + puntoEquilibrio.ToString("F2")));
         Console.WriteLine(Centrar("El resultado es:" + PropiedadMercado(cantDemanda, cantOferta)));
