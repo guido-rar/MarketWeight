@@ -34,8 +34,8 @@ DELIMITER $$
     /*Compra*/
     
     /*Verifica y añade saldo a Usuario*/
-    DROP TRIGGER IF EXISTS `BefComprarMoneda`$$
-    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefComprarMoneda` BEFORE UPDATE ON `UsuarioMoneda` 
+    DROP TRIGGER IF EXISTS `BefComprarMoneda_VerificaSaldo`$$
+    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefComprarMoneda_VerificaSaldo` BEFORE UPDATE ON `UsuarioMoneda` 
     FOR EACH ROW 
     BEGIN
             SELECT saldo INTO @xsaldo
@@ -46,22 +46,22 @@ DELIMITER $$
             THEN 
                 UPDATE Usuario
                 SET saldo = saldo - PrecioCompra(NEW.cantidad, NEW.idMoneda)
-                WHERE idUsuario = xidusuario;
+                WHERE idUsuario = NEW.`idUsuario`;
             
-                INSERT INTO Historial (idMoneda, cantidad, fechaHora, accion, idUsuario)
+                INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
                     VALUES (NEW.idMoneda, NEW.cantidad, NOW(), TRUE, NEW.idUsuario);
             ELSE
                 SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = "Saldo Insuficiente";
+                SET MESSAGE_TEXT = "Saldo Insuficiente - BefComprarMoneda";
             END IF;
     END $$
 
 
 
-    /*Crea tabla UsuarioMoneda(si no existe)*/
-    DROP TRIGGER IF EXISTS `BefComprarMoneda2`$$
-    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefComprarMoneda2` BEFORE UPDATE ON `UsuarioMoneda` 
-    FOR EACH ROW FOLLOWS BefComprarMoneda
+    /*Crea tabla UsuarioMoneda(si no existe)
+    DROP TRIGGER IF EXISTS `BefComprarMoneda2_CreaUsuarioMoneda`$$
+    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefComprarMoneda2_CreaUsuarioMoneda` BEFORE UPDATE ON `UsuarioMoneda` 
+    FOR EACH ROW FOLLOWS `BefComprarMoneda_VerificaSaldo`
     BEGIN
             IF NOT (EXISTS (
                 SELECT *
@@ -73,7 +73,7 @@ DELIMITER $$
                         Values(NEW.idUsuario, NEW.idMoneda, 0);
             END IF;
     END $$
-
+        */
 
     /*Venta*/
 
@@ -91,7 +91,7 @@ DELIMITER $$
                 SET saldo = saldo + PrecioCompra(NEW.cantidad, NEW.idMoneda)
                 WHERE idUsuario = new.idUsuario;
 
-                INSERT INTO Historial (idMoneda, cantidad, fechaHora, accion, idUsuario)
+                INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
                     VALUES (NEW.idMoneda, NEW.cantidad, NOW(), FALSE, NEW.idUsuario);
             END IF;
     END $$
