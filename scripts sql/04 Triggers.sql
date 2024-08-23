@@ -1,4 +1,4 @@
-USE 5to_MarketWeight $$
+USE 5to_MarketWeight
 DELIMITER $$
 /*USUARIO*/
 
@@ -10,7 +10,7 @@ DELIMITER $$
     FOR EACH ROW 
     BEGIN   
         SET new.pass = SHA2(NEW.pass, 256);
-    END $$ 
+    END $$
     
 
     /*Verifica si no existe otro usuario registrado con el mismo email*/
@@ -34,26 +34,21 @@ DELIMITER $$
     /*Compra*/
     
     /*Verifica y añade saldo a Usuario*/
-    DROP TRIGGER IF EXISTS `BefComprarMoneda_VerificaSaldo`$$
-    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefComprarMoneda_VerificaSaldo` BEFORE UPDATE ON `UsuarioMoneda` 
-    FOR EACH ROW 
+    DROP TRIGGER IF EXISTS `aftInsertHistorial`$$
+    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `aftInsertHistorial` AFTER INSERT ON `Historial` 
+    FOR EACH ROW
     BEGIN
-            SELECT saldo INTO @xsaldo
-            FROM Usuario
-            WHERE `idUsuario` = NEW.`idUsuario`;
-            
-            IF (@xsaldo >= PrecioCompra(NEW.cantidad, NEW.idMoneda))
-            THEN 
-                UPDATE Usuario
-                SET saldo = saldo - PrecioCompra(NEW.cantidad, NEW.idMoneda)
-                WHERE idUsuario = NEW.`idUsuario`;
-            
-                INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
-                    VALUES (NEW.idMoneda, NEW.cantidad, NOW(), TRUE, NEW.idUsuario);
-            ELSE
-                SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = "Saldo Insuficiente - BefComprarMoneda";
-            END IF;
+        IF(NEW.compra = TRUE)
+        THEN 
+            UPDATE Usuario
+            SET saldo = saldo + PrecioCompra(NEW.cantidad, NEW.idMoneda)
+            WHERE idUsuario = NEW.idUsuario;
+        
+        ELSE
+            UPDATE Usuario
+            SET saldo = saldo - PrecioCompra(NEW.cantidad, NEW.idMoneda)
+            WHERE idUsuario = NEW.idUsuario;
+        END IF;
     END $$
 
 
@@ -78,23 +73,23 @@ DELIMITER $$
     /*Venta*/
 
     /*Verifica si el usuario tiene las monedas a vender*/
-    DROP TRIGGER IF EXISTS `BefVenderMoneda`$$
-    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefVenderMoneda` BEFORE UPDATE ON `UsuarioMoneda` 
-    FOR EACH ROW
-    BEGIN
-            IF (OLD.cantidad > NEW.cantidad)
-            THEN 
-                SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = "Cantidad Insuficiente!";
-            ELSE
-                UPDATE Usuario
-                SET saldo = saldo + PrecioCompra(NEW.cantidad, NEW.idMoneda)
-                WHERE idUsuario = new.idUsuario;
+    -- DROP TRIGGER IF EXISTS `BefVenderMoneda`$$
+    -- CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefVenderMoneda` BEFORE UPDATE ON `UsuarioMoneda` 
+    -- FOR EACH ROW
+    -- BEGIN
+    --         IF (OLD.cantidad > NEW.cantidad)
+    --         THEN 
+    --             SIGNAL SQLSTATE '45000'
+    --             SET MESSAGE_TEXT = "Cantidad Insuficiente!";
+    --         ELSE
+    --             UPDATE Usuario
+    --             SET saldo = saldo + PrecioCompra(NEW.cantidad, NEW.idMoneda)
+    --             WHERE idUsuario = new.idUsuario;
 
-                INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
-                    VALUES (NEW.idMoneda, NEW.cantidad, NOW(), FALSE, NEW.idUsuario);
-            END IF;
-    END $$
+    --             INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
+    --                 VALUES (NEW.idMoneda, NEW.cantidad, NOW(), FALSE, NEW.idUsuario);
+    --         END IF;
+    -- END $$
 
 
 
