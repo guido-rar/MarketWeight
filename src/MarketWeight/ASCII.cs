@@ -24,7 +24,16 @@ internal static class ASCII
               .^^^^^::^^^^^.            
         ";
 
+
     internal static string a = @"
+                   _        _   __    __     _       _     _   
+  /\/\   __ _ _ __| | _____| |_/ / /\ \ \___(_) __ _| |__ | |_ 
+ /    \ / _` | '__| |/ / _ \ __\ \/  \/ / _ \ |/ _` | '_ \| __|
+/ /\/\ \ (_| | |  |   <  __/ |_ \  /\  /  __/ | (_| | | | | |_ 
+\/    \/\__,_|_|  |_|\_\___|\__| \/  \/ \___|_|\__, |_| |_|\__|
+                                               |___/           ";
+                                               
+    internal static string b = @"
                                                                                                                                         ::                  
                                                                                                                              ^7J~.   :7Y@@Y7:   .~Y7^       
     888b     d888                  888               888    888       888          d8b          888      888                 ^7J~.   :7Y@@Y7:   .~Y7^       
@@ -40,10 +49,10 @@ internal static class ASCII
                                                                                         'Y88P'                                    .7?B#&@@&#B?7.            
                                                                                                                                   .^^^^^::^^^^^.            
 ";
-    internal static string Creditos = 
-    @"
-Proyecto creado en C# por los alumnos de la ET 12 N°1
-Carlos Bello, Walter Benítez, Jorge Casco, Guido Gavilán y Francisco García.
-5° 8° 2024
-    ";
+
+    internal static string[] Creditos = [
+        "Proyecto creado en C# por los alumnos de la ET 12 N°1", 
+        "Carlos Bello, Walter Benítez, Jorge Casco, Guido Gavilán y Francisco García.",
+        "5° 8° 2024"
+        ];
 }

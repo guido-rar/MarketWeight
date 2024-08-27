@@ -1,7 +1,7 @@
 class MarketWeight
 {
-    public static int windowWidth = 156;
-    public static int windowHeight = 44;
+    public static int windowWidth = 100;
+    public static int windowHeight = 40;
 
     internal static bool salir = false;
 
