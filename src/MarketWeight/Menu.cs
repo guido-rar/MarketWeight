@@ -256,21 +256,21 @@ class Menu
         if(cantDemanda > cantOferta)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(Centrar("↓ Activo en baja"));
+            Console.WriteLine(Centrar(ASCII.ActivoBaja));
             ReiniciarColores();
         }
 
         else if(cantDemanda < cantOferta)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(Centrar("↑ Activo en alza"));
+            Console.WriteLine(Centrar(ASCII.ActivoAlza));
             ReiniciarColores();
         } 
 
         else
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(Centrar("= Activo en equilibrio"));
+            Console.WriteLine(Centrar(ASCII.ActivoEquilibrio));
             ReiniciarColores();
         }
     }
