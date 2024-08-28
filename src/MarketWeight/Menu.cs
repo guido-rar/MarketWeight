@@ -95,16 +95,12 @@ class Menu
                 break;
                 
                 case 1:
-                    //IMprimir REgistro de calculos realizados.
-                break;
-
-                case 2:
                     Console.Clear();
                     Console.WriteLine("\n\n\n");
                     Console.WriteLine(Centrar("Adios!!!"));
                     Console.WriteLine(Centrar("Gracias por utilizar nuestros servicios."));
                     Console.WriteLine("\n\n\n");
-                    MarketWeight.salir = true;
+                    MarketWeight.salir = true;                
                 break;
 
                 default:
@@ -299,6 +295,11 @@ class Menu
         Console.WriteLine(Centrar("Presione [Enter] para volver al inicio."));
 
         if(EscucharTeclado() == ConsoleKey.Enter)
+        {
+            MarketWeight.salir = false;
+            MarketWeight.BuclePantallaPrincipal();
+        }
+        else
         {
             MarketWeight.salir = false;
             MarketWeight.BuclePantallaPrincipal();
