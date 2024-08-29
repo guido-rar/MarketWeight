@@ -119,15 +119,17 @@ class Menu
 
         ImprimirMenu(_opciones);
 
+        Console.WriteLine("\n\n");
+
         Console.ForegroundColor = ConsoleColor.DarkGray;
 
         foreach(string a in ASCII.Creditos)
             Console.WriteLine(Centrar(a));
 
-        Console.WriteLine(_tecla);
-        Console.WriteLine(_opcionActual);
-        Console.WriteLine(Convert.ToString(Console.WindowWidth));
-        Console.WriteLine(Convert.ToString(Console.WindowHeight));
+        // Console.WriteLine(_tecla);
+        // Console.WriteLine(_opcionActual);
+        // Console.WriteLine(Convert.ToString(Console.WindowWidth));
+        // Console.WriteLine(Convert.ToString(Console.WindowHeight));
 
         NavegarMenu();
     }
@@ -194,14 +196,20 @@ class Menu
             }
             catch(Exception e)
             {
+                Console.Clear();
+
+                ImprimirTitulo();
+
+                System.Console.WriteLine("\n");
+
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(Centrar("Error!! Ingrese un número válido"));
                 ReiniciarColores();
-                Thread.Sleep(3222);
+                Console.WriteLine(Centrar("Presiona cualquier tecla para continuar."));
+
+                Console.ReadKey();
                 ImprimirPedido();
             }
-
-            
         } 
 
         
@@ -287,12 +295,13 @@ class Menu
 
         Console.WriteLine(Centrar(""));
         Console.WriteLine(Centrar($"Precio de Demanda: " + pDemanda.ToString("F2") + "     Precio de Oferta: "  + pOferta.ToString("F2")));
+        System.Console.WriteLine("");
         Console.WriteLine(Centrar($"Cantidad de {NActivo}: " + demanda.ToString("F2") + "     Precio de Equilibrio: " + puntoEquilibrio.ToString("F2")));
         PropiedadMercado(cantDemanda, cantOferta);
         
         Console.WriteLine("\n\n");
 
-        Console.WriteLine(Centrar("Presione [Enter] para volver al inicio."));
+        Console.WriteLine(Centrar("Presione cualquier tecla para volver al inicio."));
 
         if(EscucharTeclado() == ConsoleKey.Enter)
         {
