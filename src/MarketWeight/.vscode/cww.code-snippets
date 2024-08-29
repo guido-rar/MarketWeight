@@ -1,0 +1,10 @@
+{
+	"Print to console": {
+		"scope": "csharp",
+		"prefix": "cww",
+		"body": [
+			"Console.WriteLine($1);"
+		],
+		"description": "Log output to console"
+	}
+}
