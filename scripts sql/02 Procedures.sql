@@ -39,9 +39,8 @@ BEGIN
               VALUES (xidmoneda, xcantidad, NOW(), TRUE, xidusuario);
        ELSE
             SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = "Cantidad Insuficiente!";
+            SET MESSAGE_TEXT = "Saldo Insuficiente!";
        END IF;
-       
 END $$
 
 DROP PROCEDURE IF EXISTS IngresarDinero $$
@@ -53,7 +52,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS VenderMoneda $$
-CREATE PROCEDURE `VenderMoneda`(xidusuario INT UNSIGNED, xidmoneda INT UNSIGNED, xcantidad DECIMAL(20,10))
+CREATE PROCEDURE `VenderMoneda`(xidusuario INT UNSIGNED, xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED)
 BEGIN
        SELECT cantidad INTO @xcantidad
        FROM `UsuarioMoneda`
@@ -68,7 +67,7 @@ BEGIN
               AND idUsuario = xidusuario;
 
               INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
-              VALUES (xidmoneda, xcantidad, NOW(), TRUE, xidusuario);
+              VALUES (xidmoneda, xcantidad, NOW(), FALSE, xidusuario);
        ELSE
               SIGNAL SQLSTATE '45000'
               SET MESSAGE_TEXT = "Cantidad Insuficiente!";

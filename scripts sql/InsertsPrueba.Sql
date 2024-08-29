@@ -27,4 +27,5 @@ CALL IngresarDinero(2, 10000);
 
 Use 5to_MarketWeight
 
-CALL ComprarMoneda(1, 1 ,4);
+CALL ComprarMoneda(2, 1 ,4);
+CALL `VenderMoneda`(2, 1, 4);

@@ -41,13 +41,20 @@ DELIMITER $$
         IF(NEW.compra = TRUE)
         THEN 
             UPDATE Usuario
-            SET saldo = saldo + PrecioCompra(NEW.cantidad, NEW.idMoneda)
-            WHERE idUsuario = NEW.idUsuario;
-        
-        ELSE
-            UPDATE Usuario
             SET saldo = saldo - PrecioCompra(NEW.cantidad, NEW.idMoneda)
             WHERE idUsuario = NEW.idUsuario;
+
+            UPDATE `Moneda`
+            SET cantidad = cantidad - NEW.cantidad
+            WHERE `idMoneda` = NEW.`idMoneda`;
+        ELSE
+            UPDATE Usuario
+            SET saldo = saldo + PrecioCompra(NEW.cantidad, NEW.idMoneda)
+            WHERE idUsuario = NEW.idUsuario;
+
+            UPDATE `Moneda`
+            SET cantidad = cantidad + NEW.cantidad
+            WHERE `idMoneda` = NEW.`idMoneda`;
         END IF;
     END $$
 

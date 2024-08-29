@@ -14,13 +14,13 @@ BEGIN
     RETURN NULL;
 END $$
 
-DROP FUNCTION IF EXISTS PrecioCompra $$
+DROP FUNCTION IF EXISTS PuedeComprar $$
 CREATE DEFINER=`5to_agbd`@`localhost` FUNCTION `PuedeComprar`(xidusuario INT, xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED) RETURNS TINYINT
 READS SQL DATA
 BEGIN
     SELECT saldo INTO @saldo
     FROM Usuario
-    WHERE `idUsuario` = NEW.`idUsuario`;
+    WHERE `idUsuario` = xidusuario;
 
     SET @precio = PrecioCompra(xcantidad, xidmoneda);
 

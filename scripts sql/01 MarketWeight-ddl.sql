@@ -71,11 +71,11 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Historial` (
   `idHistorial` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT UNSIGNED NOT NULL,
   `idMoneda` INT UNSIGNED NOT NULL,
   `cantidad` DECIMAL(20,10) UNSIGNED NULL,
   `fechaHora` DATETIME NOT NULL,
   `compra` TINYINT UNSIGNED NOT NULL,
-  `idUsuario` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`idHistorial`, `idMoneda`, `idUsuario`),
   INDEX `fk_Historial_Moneda1_idx` (`idMoneda` ASC) VISIBLE,
   INDEX `idMoneda_UNIQUE` (`idMoneda` ASC) VISIBLE,
