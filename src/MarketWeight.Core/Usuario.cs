@@ -1,7 +1,7 @@
 namespace MarketWeight.Core;
 public class Usuario
 {
-    public required int IdUsuario { get; set; }
+    public required uint IdUsuario { get; set; }
     public required string Nombre { get; set; }
     public required string Apellido { get; set; }
     public required string Email { get; set; }
