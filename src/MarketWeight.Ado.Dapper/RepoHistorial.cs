@@ -37,11 +37,15 @@ public class RepoHistorial : RepoGenerico, IRepoHistorial
 
     public Historial? Detalle(uint indiceABuscar)
     {
-        throw new NotImplementedException();
+        var consulta = $"SELECT * FROM Moneda WHERE idMoneda = {indiceABuscar}";
+        var registro = Conexion.QueryFirstOrDefault<Historial>(consulta);
+        return registro;
     }
 
     public IEnumerable<Historial> Obtener()
     {
-        throw new NotImplementedException();
+        var consulta = "SELECT * FROM Usuario";
+        var registros = Conexion.Query<Historial>(consulta);
+        return registros;
     }
 }

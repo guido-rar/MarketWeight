@@ -23,9 +23,3 @@ CALL AltaUsuario('Javier', 'Ramírez', 'javier.ramirez@example.com', 'welcome1')
 CALL IngresarDinero(2, 0);
 CALL IngresarDinero(3, 10000);
 CALL IngresarDinero(2, 10000);
-
-
-Use 5to_MarketWeight
-
-CALL ComprarMoneda(2, 1 ,4);
-CALL `VenderMoneda`(2, 1, 4);

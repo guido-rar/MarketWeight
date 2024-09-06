@@ -23,7 +23,7 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
         parametros.Add("@xpass", usuario.Password);
         try
         {
-            Conexion.Execute("altaCriptoMoneda", parametros);
+            Conexion.Execute("AltaUsuario", parametros);
         }
         catch (DbException e)
         {

@@ -5,5 +5,5 @@ public interface IRepoUsuario :
     IRepoListado<Usuario>,
     IRepoDetalle<Usuario, uint>
 {
-    
+
 }
