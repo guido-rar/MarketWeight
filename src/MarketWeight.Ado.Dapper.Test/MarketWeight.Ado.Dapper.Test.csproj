@@ -25,4 +25,9 @@
     <ProjectReference Include="..\MarketWeight.Core\MarketWeight.Core.csproj" />
     <ProjectReference Include="..\MarketWeight.Ado.Dapper\MarketWeight.Ado.Dapper.csproj" />
   </ItemGroup>
+    <ItemGroup>
+    <None Update="appSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
