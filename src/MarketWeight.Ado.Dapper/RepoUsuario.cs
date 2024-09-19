@@ -30,7 +30,7 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
             //DuplicateKeyEntry   
             if (e.ErrorCode == 1062)
             {
-                throw new ConstraintException($"La moneda {usuario.Nombre} ya ha sido ingresada.");
+                throw new ConstraintException($"El Usuario {usuario.Nombre} ya ha sido ingresada.");
             }
             throw;
         }
@@ -48,5 +48,35 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
         var consulta = $"SELECT * FROM Usuario WHERE idUsuario = {indiceABuscar}";
         var usuarios = Conexion.QueryFirstOrDefault<Usuario>(consulta);
         return usuarios;
+    }
+    public void Ingreso(uint idusuario, decimal saldo)
+    {
+
+        var parametros = new DynamicParameters();
+        parametros.Add("@xidusuario", idusuario);
+        parametros.Add("@xsaldo", saldo);
+
+        Conexion.Execute("IngresarDinero", parametros);
+    }
+    public void Compra(uint idusuario, decimal cantidad, uint idmoneda)
+    {
+
+        var parametros = new DynamicParameters();
+        parametros.Add("@xidusuario", idusuario);
+        parametros.Add("@xcantidad", cantidad);
+        parametros.Add("@xidmoneda", idmoneda);
+
+        Conexion.Execute("ComprarMoneda", parametros);
+    }
+
+    public void Vender(uint idusuario, decimal cantidad, uint idmoneda)
+    {
+
+        var parametros = new DynamicParameters();
+        parametros.Add("@xidusuario", idusuario);
+        parametros.Add("@xcantidad", cantidad);
+        parametros.Add("@xidmoneda", idmoneda);
+
+        Conexion.Execute("VenderMoneda", parametros);
     }
 }

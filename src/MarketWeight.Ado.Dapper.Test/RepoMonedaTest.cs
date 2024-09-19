@@ -18,4 +18,20 @@ public class RepoMonedaTest : TestBase
         Assert.Contains(monedas,
             m => m.Nombre == "Bitcoin");
     }
+    
+    [Fact]
+    public void CrearMoneda()
+    {
+        Moneda monedaPepe = new Moneda
+        {
+            Precio = 10m,
+            Cantidad = 2m,
+            Nombre = "pepe"
+        };
+
+        _repo.Alta(monedaPepe);
+
+        var monedas = _repo.Obtener();
+        Assert.Contains(monedas, m => m.Nombre == "pepe");
+    }
 }

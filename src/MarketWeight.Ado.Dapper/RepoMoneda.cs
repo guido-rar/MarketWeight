@@ -17,7 +17,7 @@ public class RepoMoneda : RepoGenerico, IRepoMoneda
         var parametros = new DynamicParameters();
         parametros.Add("@xprecio", moneda.Precio);
         parametros.Add("@xcantidad", moneda.Cantidad);
-        parametros.Add("@xmoneda", moneda.Nombre);
+        parametros.Add("@xnombre", moneda.Nombre);
 
         try
         {
