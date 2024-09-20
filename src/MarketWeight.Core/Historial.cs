@@ -2,7 +2,6 @@ namespace MarketWeight.Core
 {
     public class Historial
     {
-        public required uint IdHistorial { get; set; }
         public required uint IdUsuario { get; set; }
         public required uint idMoneda { get; set; }
         public required decimal Cantidad { get; set; }

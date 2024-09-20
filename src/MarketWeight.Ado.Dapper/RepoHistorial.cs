@@ -42,10 +42,17 @@ public class RepoHistorial : RepoGenerico, IRepoHistorial
         return registro;
     }
 
+    public IEnumerable<Historial> ObtenerUsuarioMoneda(uint indiceUsuario)
+    {
+        var consulta = $"SELECT M.Nombre, H.Cantidad FROM Historial H JOIN Moneda M USING (idMoneda) WHERE H.idUsuario = {indiceUsuario}";
+        var registro = Conexion.Query<Historial>(consulta);
+        return registro;
+    }
     public IEnumerable<Historial> Obtener()
     {
         var consulta = "SELECT * FROM Usuario";
         var registros = Conexion.Query<Historial>(consulta);
         return registros;
     }
+    
 }

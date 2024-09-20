@@ -5,5 +5,5 @@ public interface IRepoHistorial :
     IRepoListado<Historial>,
     IRepoDetalle<Historial, uint>
 {
-    
+    public IEnumerable<Historial> ObtenerUsuarioMoneda(uint indiceUsuario);
 }

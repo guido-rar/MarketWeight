@@ -43,6 +43,8 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
         return usuarios;
     }
 
+
+
     public Usuario? Detalle(uint indiceABuscar)
     {
         var consulta = $"SELECT * FROM Usuario WHERE idUsuario = {indiceABuscar}";
