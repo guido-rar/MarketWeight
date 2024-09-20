@@ -81,4 +81,11 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
 
         Conexion.Execute("VenderMoneda", parametros);
     }
+
+    public IEnumerable<Usuario> ObtenerPorCondicion (string condicion)
+    {
+        var consulta = $"SELECT U.nombre, U.saldo FROM Usuario U WHERE {condicion}";
+        var usuarios = Conexion.Query<Usuario>(consulta);
+        return usuarios;
+    }
 }

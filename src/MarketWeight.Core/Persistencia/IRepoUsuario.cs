@@ -13,4 +13,6 @@ public interface IRepoUsuario :
 
     public void Ingreso(uint idusuario, decimal saldo)
     {}
+
+    public IEnumerable<Usuario> ObtenerPorCondicion (string condicion);
 }

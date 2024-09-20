@@ -95,4 +95,11 @@ public class RepoUsuarioTest : TestBase
 
         _repo.Vender(2, 0.1m, 1);
     }
+
+    [Fact]
+    public void ObtenerPorCondicion()
+    {
+        var usuarios = _repo.ObtenerPorCondicion("saldo >= 1000");
+        Assert.NotEmpty(usuarios);
+    }
 }

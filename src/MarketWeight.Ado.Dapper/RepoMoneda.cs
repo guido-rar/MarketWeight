@@ -47,4 +47,5 @@ public class RepoMoneda : RepoGenerico, IRepoMoneda
         var monedas = Conexion.Query<Moneda>(consulta);
         return monedas;
     }
+
 }
