@@ -34,4 +34,12 @@ public class RepoMonedaTest : TestBase
         var monedas = _repo.Obtener();
         Assert.Contains(monedas, m => m.Nombre == "pepe");
     }
+
+    [Fact]
+    public void ObtenerConCondicion()
+    {
+        var monedas = _repo.ObtenerConCondicion("precio >= 100");
+
+        Assert.NotEmpty(monedas);
+    }
 }
