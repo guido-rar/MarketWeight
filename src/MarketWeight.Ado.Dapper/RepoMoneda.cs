@@ -48,4 +48,10 @@ public class RepoMoneda : RepoGenerico, IRepoMoneda
         return monedas;
     }
 
+    public IEnumerable<Moneda> ObtenerConCondicion(string condicion)
+    {
+        var consulta = $"SELECT * FROM Moneda WHERE {condicion}";
+        var monedas = Conexion.Query<Moneda>(consulta);
+        return monedas;
+    }
 }

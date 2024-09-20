@@ -5,5 +5,5 @@ public interface IRepoMoneda :
     IRepoListado<Moneda>,
     IRepoDetalle<Moneda, uint>
 {
-    
+    public IEnumerable<Moneda> ObtenerConCondicion(string condicion);
 }
