@@ -1,5 +1,6 @@
 using MarketWeight.Core;
 using MarketWeight.Core.Persistencia;
+using MySqlConnector;
 
 namespace MarketWeight.Ado.Dapper.Test;
 
@@ -11,19 +12,13 @@ public class RepoMonedaTest : TestBase
 
     [Fact]
 
-    public void CrearMoneda()
+    public void CrearMonedaOK()
     {
         Moneda monedaPepe = new Moneda
         {
             Precio = 10m,
             Cantidad = 2m,
             Nombre = "pepe"
-        };
-        Moneda monedaDoge = new Moneda
-        {
-            Precio = 77m,
-            Cantidad = 100m,
-            Nombre = "DogeCoin"
         };
 
         Moneda monedaVirgo = new Moneda
@@ -34,9 +29,32 @@ public class RepoMonedaTest : TestBase
         };
 
         _repo.Alta(monedaPepe);
-        _repo.Alta(monedaDoge);
         _repo.Alta(monedaVirgo);
         
+    }
+
+    [Fact]
+    public void CrearMonedaFail()
+    {
+        Moneda monedaDoge = new Moneda
+        {
+            Precio = 77m,
+            Cantidad = 100m,
+            Nombre = "DogeCoin"
+        };
+
+        Moneda monedaLitecoin = new Moneda
+        {
+            Precio = 77m,
+            Cantidad = 100m,
+            Nombre = "Litecoin"
+        };
+
+        var error =  Assert.Throws<MySqlException> (()=>_repo.Alta(monedaDoge));
+        Assert.Equal("Moneda ya registrada :v", error.Message);
+
+        error =  Assert.Throws<MySqlException> (()=>_repo.Alta(monedaLitecoin));
+        Assert.Equal("Moneda ya registrada :v", error.Message);
     }
 
     [Fact]
@@ -50,7 +68,7 @@ public class RepoMonedaTest : TestBase
     }
     
     [Fact]
-    public void ObtenerConCondicion()
+    public void ObtenerConCondicionOK()
     {
         var monedas = _repo.ObtenerConCondicion("precio >= 100");
 

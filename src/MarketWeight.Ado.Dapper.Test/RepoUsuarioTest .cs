@@ -1,5 +1,6 @@
 using MarketWeight.Core;
 using MarketWeight.Core.Persistencia;
+using MySqlConnector;
 
 namespace MarketWeight.Ado.Dapper.Test;
 
@@ -22,7 +23,7 @@ public class RepoUsuarioTest : TestBase
 
     [Fact]
 
-    public void IngresarDinero()
+    public void IngresarDineroOK()
     {
         _repo.Ingreso(1, 7707m);
 
@@ -35,7 +36,7 @@ public class RepoUsuarioTest : TestBase
     }
 
     [Fact]
-    public void AltaUsuario()
+    public void AltaUsuarioOK()
     {
         Usuario usuarioWalter = new()
         {
@@ -77,27 +78,33 @@ public class RepoUsuarioTest : TestBase
     }
 
     [Fact]
-    public void ComprarMoneda()
+    public void ComprarMonedaOK()
     {
         _repo.Compra(3, 0.5m, 2);
 
-        _repo.Compra(2, 1m,3 );
+        _repo.Compra(2, 1m, 3);
 
-        _repo.Compra(2, 0.5m,1 );
+        _repo.Compra(2, 0.5m, 1);
     }
 
     [Fact]
-    public void VenderMoneda()
+    public void VenderMonedaOK()
     {
-        _repo.Vender(2, 0.5m, 2);
-
-        _repo.Vender(3, 0.5m, 5);
-
         _repo.Vender(2, 0.1m, 1);
     }
 
     [Fact]
-    public void ObtenerPorCondicion()
+    public void VenderMonedaFail()
+    {
+        var error =  Assert.Throws<MySqlException> (()=>_repo.Vender(2, 0.5m, 2));
+        Assert.Equal("Cantidad Insuficiente!", error.Message);
+
+        error =  Assert.Throws<MySqlException> (()=>_repo.Vender(3, 0.5m, 5));
+        Assert.Equal("Cantidad Insuficiente!", error.Message);
+    }
+
+    [Fact]
+    public void ObtenerPorCondicionOK()
     {
         var usuarios = _repo.ObtenerPorCondicion("saldo >= 1000");
         Assert.NotEmpty(usuarios);

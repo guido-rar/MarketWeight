@@ -6,7 +6,7 @@ DELIMITER $$
 
     
     DROP TRIGGER IF EXISTS `aftAltaPass` $$
-    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `aftAltaPass` BEFORE INSERT ON `Usuario` 
+    CREATE DEFINER=`root`@`localhost` TRIGGER `aftAltaPass` BEFORE INSERT ON `Usuario` 
     FOR EACH ROW 
     BEGIN   
         SET new.pass = SHA2(NEW.pass, 256);
@@ -35,7 +35,7 @@ DELIMITER $$
     
     /*Verifica y añade saldo a Usuario*/
     DROP TRIGGER IF EXISTS `aftInsertHistorial`$$
-    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `aftInsertHistorial` AFTER INSERT ON `Historial` 
+    CREATE DEFINER=`root`@`localhost` TRIGGER `aftInsertHistorial` AFTER INSERT ON `Historial` 
     FOR EACH ROW
     BEGIN
         IF(NEW.compra = TRUE)
@@ -62,7 +62,7 @@ DELIMITER $$
 
     /*Crea tabla UsuarioMoneda(si no existe)
     DROP TRIGGER IF EXISTS `BefComprarMoneda2_CreaUsuarioMoneda`$$
-    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefComprarMoneda2_CreaUsuarioMoneda` BEFORE UPDATE ON `UsuarioMoneda` 
+    CREATE DEFINER=`root`@`localhost` TRIGGER `BefComprarMoneda2_CreaUsuarioMoneda` BEFORE UPDATE ON `UsuarioMoneda` 
     FOR EACH ROW FOLLOWS `BefComprarMoneda_VerificaSaldo`
     BEGIN
             IF NOT (EXISTS (
@@ -81,7 +81,7 @@ DELIMITER $$
 
     /*Verifica si el usuario tiene las monedas a vender*/
     -- DROP TRIGGER IF EXISTS `BefVenderMoneda`$$
-    -- CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefVenderMoneda` BEFORE UPDATE ON `UsuarioMoneda` 
+    -- CREATE DEFINER=`root`@`localhost` TRIGGER `BefVenderMoneda` BEFORE UPDATE ON `UsuarioMoneda` 
     -- FOR EACH ROW
     -- BEGIN
     --         IF (OLD.cantidad > NEW.cantidad)
@@ -103,7 +103,7 @@ DELIMITER $$
 /*MONEDA*/
 
     DROP TRIGGER IF EXISTS BefAltaMoneda $$
-    CREATE DEFINER=`5to_agbd`@`localhost` TRIGGER `BefAltaMoneda` BEFORE INSERT ON `Moneda` 
+    CREATE DEFINER=`root`@`localhost` TRIGGER `BefAltaMoneda` BEFORE INSERT ON `Moneda` 
     FOR EACH ROW   
     BEGIN
         IF(EXISTS(

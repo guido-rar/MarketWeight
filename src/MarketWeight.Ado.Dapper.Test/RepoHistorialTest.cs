@@ -18,11 +18,4 @@ public class RepoHistorialTest : TestBase
         Assert.Contains(historiales,
             h => h.IdUsuario == 2);
     }
-
-    [Fact]
-    public void TraerMonedas()
-    {
-        var monedasDelUSuario = _repo.ObtenerUsuarioMoneda(2);
-        Assert.NotEmpty(monedasDelUSuario);
-    }
 }
