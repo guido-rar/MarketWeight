@@ -10,16 +10,7 @@ public class RepoMonedaTest : TestBase
         => _repo = new RepoMoneda(Conexion);
 
     [Fact]
-    public void TraerOK()
-    {
-        var monedas = _repo.Obtener();
-        
-        Assert.NotEmpty(monedas);
-        Assert.Contains(monedas,
-            m => m.Nombre == "Bitcoin");
-    }
-    
-    [Fact]
+
     public void CrearMoneda()
     {
         Moneda monedaPepe = new Moneda
@@ -28,13 +19,36 @@ public class RepoMonedaTest : TestBase
             Cantidad = 2m,
             Nombre = "pepe"
         };
+        Moneda monedaDoge = new Moneda
+        {
+            Precio = 77m,
+            Cantidad = 100m,
+            Nombre = "DogeCoin"
+        };
+
+        Moneda monedaVirgo = new Moneda
+        {
+            Precio = 300m,
+            Cantidad = 5000m,
+            Nombre = "VirgoCoin"
+        };
 
         _repo.Alta(monedaPepe);
-
-        var monedas = _repo.Obtener();
-        Assert.Contains(monedas, m => m.Nombre == "pepe");
+        _repo.Alta(monedaDoge);
+        _repo.Alta(monedaVirgo);
+        
     }
 
+    [Fact]
+    public void TraerOK()
+    {
+        var monedas = _repo.Obtener();
+        
+        Assert.NotEmpty(monedas);
+        Assert.Contains(monedas,
+            m => m.Nombre == "Bitcoin" || m.Nombre == "pepe"  || m.Nombre == "dogeCoin" || m.Nombre == "VirgoCoin");
+    }
+    
     [Fact]
     public void ObtenerConCondicion()
     {
