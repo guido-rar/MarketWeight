@@ -56,6 +56,7 @@ DELIMITER $$
             SET cantidad = cantidad + NEW.cantidad
             WHERE `idMoneda` = NEW.`idMoneda`;
         END IF;
+
     END $$
 
 

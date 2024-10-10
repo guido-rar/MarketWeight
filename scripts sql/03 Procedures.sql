@@ -18,6 +18,7 @@ END $$
 DROP PROCEDURE IF EXISTS ComprarMoneda $$
 CREATE PROCEDURE `ComprarMoneda`(xidusuario INT UNSIGNED, xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED)
 BEGIN
+       START TRANSACTION;
        IF (PuedeComprar(xidUsuario, xcantidad, xidmoneda))
        THEN 
               IF (NOT (EXISTS (
@@ -41,6 +42,7 @@ BEGIN
             SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = "Saldo Insuficiente!";
        END IF;
+       COMMIT;
 END $$
 
 DROP PROCEDURE IF EXISTS IngresarDinero $$

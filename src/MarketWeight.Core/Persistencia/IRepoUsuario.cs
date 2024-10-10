@@ -15,4 +15,5 @@ public interface IRepoUsuario :
     {}
 
     public IEnumerable<Usuario> ObtenerPorCondicion (string condicion);
+
 }
