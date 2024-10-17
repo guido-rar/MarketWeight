@@ -23,3 +23,6 @@ CALL AltaUsuario('Javier', 'Ramírez', 'javier.ramirez@example.com', 'welcome1')
 CALL IngresarDinero(2, 0);
 CALL IngresarDinero(3, 10000);
 CALL IngresarDinero(2, 10000);
+
+CALL ComprarMoneda (2, 1, 2);
+CALL Transferencia (2, 0.5, 2, 3);

@@ -1,10 +1,10 @@
-USE 5to_MarketWeight;
+USE 5to_MarketWeight
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS AltaCriptoMoneda $$
 CREATE PROCEDURE `AltaCriptoMoneda`(xprecio DECIMAL(20,10), xcantidad DECIMAL(20,10), xnombre VARCHAR(45))
 BEGIN
-   INSERT INTO `Moneda` (precio, cantidad, nombre)
+       INSERT INTO `Moneda` (precio, cantidad, nombre)
            VALUES(xprecio, xcantidad, xnombre);
 END $$
 
@@ -56,12 +56,7 @@ END $$
 DROP PROCEDURE IF EXISTS VenderMoneda $$
 CREATE PROCEDURE `VenderMoneda`(xidusuario INT UNSIGNED, xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED)
 BEGIN
-       SELECT cantidad INTO @xcantidad
-       FROM `UsuarioMoneda`
-       WHERE `idMoneda` = xidmoneda AND `idUsuario` = xidusuario;
-
-
-       IF(@xcantidad >= xcantidad)
+       IF(PuedeVender(xidusuario, xcantidad, xidmoneda))
        THEN
               UPDATE UsuarioMoneda
               SET cantidad = cantidad - xcantidad
@@ -76,8 +71,6 @@ BEGIN
        END IF;
 END $$
 
-
-
 DROP PROCEDURE IF EXISTS AltaHistorial $$
 CREATE PROCEDURE `AltaHistorial`(xidMoneda INT UNSIGNED, xcantidad DECIMAL(20,10) UNSIGNED, xcompra TINYINT UNSIGNED, xidUsuario INT UNSIGNED)
 BEGIN
@@ -85,4 +78,41 @@ BEGIN
            VALUES(xidMoneda, xcantidad, NOW(), xcompra, xidUsuario);
 END $$
 
+DROP PROCEDURE IF EXISTS Transferencia $$
+CREATE PROCEDURE `Transferencia`(xidMoneda INT UNSIGNED, xCantidad DECIMAL(20,10) UNSIGNED, xidUsuarioTransfiere INT UNSIGNED, xidUsuarioTransferido INT UNSIGNED)
+BEGIN
+       START TRANSACTION;
+       IF (PuedeVender(xidUsuarioTransfiere, xCantidad, xidMoneda))
+       THEN
+              UPDATE UsuarioMoneda
+              SET cantidad = cantidad - xCantidad
+              WHERE idMoneda = xidMoneda
+              AND idUsuario = xidUsuarioTransfiere;
 
+              INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
+              VALUES (xidMoneda, xCantidad, NOW(), NULL, xidUsuarioTransfiere);
+       ELSE
+              SIGNAL SQLSTATE '45000'
+              SET MESSAGE_TEXT = "Cantidad Insuficiente!";
+       END IF;
+
+       IF (NOT (EXISTS (
+                     SELECT *
+                     FROM `UsuarioMoneda`
+                     WHERE `idMoneda` = xidMoneda AND `idUsuario` = xidUsuarioTransferido
+                     )))
+                     THEN 
+                            INSERT INTO `UsuarioMoneda` (`idUsuario`, `idMoneda`, cantidad)
+                            VALUES(xidUsuarioTransferido, xidMoneda, 0);
+       END IF;
+
+
+              UPDATE UsuarioMoneda
+              SET cantidad = cantidad + xCantidad
+              WHERE idMoneda = xidMoneda
+              AND idUsuario = xidUsuarioTransferido;
+
+              INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
+              VALUES (xidMoneda, (xCantidad * -1), NOW(), NULL, xidUsuarioTransferido);
+       COMMIT;
+END $$

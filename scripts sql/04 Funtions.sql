@@ -1,7 +1,7 @@
-USE 5to_MarketWeight $$
+USE 5to_MarketWeight
 DELIMITER $$
 DROP FUNCTION IF EXISTS PrecioCompra $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `PrecioCompra`(xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED) RETURNS DECIMAL(20,10)
+CREATE FUNCTION `PrecioCompra`(xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED) RETURNS DECIMAL(20,10)
     READS SQL DATA
 BEGIN
     SELECT precio INTO @xprecio
@@ -15,7 +15,7 @@ BEGIN
 END $$
 
 DROP FUNCTION IF EXISTS PuedeComprar $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `PuedeComprar`(xidusuario INT, xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED) RETURNS TINYINT
+CREATE FUNCTION `PuedeComprar`(xidusuario INT, xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED) RETURNS TINYINT
 READS SQL DATA
 BEGIN
     SELECT saldo INTO @saldo
@@ -29,6 +29,22 @@ BEGIN
         RETURN TRUE;
     ELSE
         RETURN FALSE;
+    END IF;
+END $$
+
+DROP FUNCTION IF EXISTS PuedeVender $$
+CREATE FUNCTION `PuedeVender`(xidusuario INT, xcantidadAVender DECIMAL(20,10), xidmoneda INT UNSIGNED) RETURNS TINYINT
+READS SQL DATA
+BEGIN
+    SELECT cantidad INTO @cantidadMonedasUsuario
+    FROM `UsuarioMoneda`
+    WHERE `idMoneda` = xidmoneda AND `idUsuario` = xidusuario;
+
+    IF(@cantidadMonedasUsuario >= xcantidadAVender)
+    THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
     END IF;
 END $$
 

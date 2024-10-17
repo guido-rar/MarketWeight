@@ -36,7 +36,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Moneda` (
   `idMoneda` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `precio` DECIMAL(20,10) NOT NULL,
-  `cantidad` DECIMAL(20,10) NOT NULL,
+  `cantidad` DECIMAL(20,10) UNSIGNED NOT NULL,
   `nombre` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idMoneda`),
   UNIQUE INDEX `idMoneda_UNIQUE` (`idMoneda` ASC) VISIBLE)
@@ -49,7 +49,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `UsuarioMoneda` (
   `idUsuario` INT UNSIGNED NOT NULL,
   `idMoneda` INT UNSIGNED NOT NULL,
-  `cantidad` DECIMAL(20,10) NOT NULL,
+  `cantidad` DECIMAL(20,10) UNSIGNED NOT NULL,
   PRIMARY KEY (`idUsuario`, `idMoneda`),
   INDEX `fk_BilleteraMoneda_Moneda1_idx` (`idMoneda` ASC) VISIBLE,
   INDEX `fk_BilleteraMoneda_Usuario1_idx` (`idUsuario` ASC) VISIBLE,
@@ -73,9 +73,9 @@ CREATE TABLE IF NOT EXISTS `Historial` (
   `idHistorial` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `idUsuario` INT UNSIGNED NOT NULL,
   `idMoneda` INT UNSIGNED NOT NULL,
-  `cantidad` DECIMAL(20,10) UNSIGNED NULL,
+  `cantidad` DECIMAL(20,10) NULL,
   `fechaHora` DATETIME NOT NULL,
-  `compra` TINYINT UNSIGNED NOT NULL,
+  `compra` TINYINT UNSIGNED,
   PRIMARY KEY (`idHistorial`, `idMoneda`, `idUsuario`),
   INDEX `fk_Historial_Moneda1_idx` (`idMoneda` ASC) VISIBLE,
   INDEX `idMoneda_UNIQUE` (`idMoneda` ASC) VISIBLE,
@@ -93,17 +93,6 @@ CREATE TABLE IF NOT EXISTS `Historial` (
 ENGINE = InnoDB;
 
 USE `5to_MarketWeight`;
-
-DELIMITER $$
-USE `5to_MarketWeight`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `5to_MarketWeight`.`Usuario_BEFORE_INSERT` BEFORE INSERT ON `Usuario` FOR EACH ROW
-BEGIN
-
-END
-$$
-
-
-DELIMITER ;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

@@ -6,7 +6,7 @@ DELIMITER $$
 
     
     DROP TRIGGER IF EXISTS `aftAltaPass` $$
-    CREATE DEFINER=`root`@`localhost` TRIGGER `aftAltaPass` BEFORE INSERT ON `Usuario` 
+    CREATE TRIGGER `aftAltaPass` BEFORE INSERT ON `Usuario` 
     FOR EACH ROW 
     BEGIN   
         SET new.pass = SHA2(NEW.pass, 256);
@@ -35,9 +35,10 @@ DELIMITER $$
     
     /*Verifica y añade saldo a Usuario*/
     DROP TRIGGER IF EXISTS `aftInsertHistorial`$$
-    CREATE DEFINER=`root`@`localhost` TRIGGER `aftInsertHistorial` AFTER INSERT ON `Historial` 
+    CREATE TRIGGER `aftInsertHistorial` AFTER INSERT ON `Historial` 
     FOR EACH ROW
     BEGIN
+
         IF(NEW.compra = TRUE)
         THEN 
             UPDATE Usuario
@@ -47,7 +48,10 @@ DELIMITER $$
             UPDATE `Moneda`
             SET cantidad = cantidad - NEW.cantidad
             WHERE `idMoneda` = NEW.`idMoneda`;
-        ELSE
+        END IF;
+
+        IF (NEW.compra = FALSE)
+        THEN
             UPDATE Usuario
             SET saldo = saldo + PrecioCompra(NEW.cantidad, NEW.idMoneda)
             WHERE idUsuario = NEW.idUsuario;
@@ -104,7 +108,7 @@ DELIMITER $$
 /*MONEDA*/
 
     DROP TRIGGER IF EXISTS BefAltaMoneda $$
-    CREATE DEFINER=`root`@`localhost` TRIGGER `BefAltaMoneda` BEFORE INSERT ON `Moneda` 
+    CREATE TRIGGER `BefAltaMoneda` BEFORE INSERT ON `Moneda` 
     FOR EACH ROW   
     BEGIN
         IF(EXISTS(
