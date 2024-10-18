@@ -109,4 +109,28 @@ public class RepoUsuarioTest : TestBase
         var usuarios = _repo.ObtenerPorCondicion("saldo >= 1000");
         Assert.NotEmpty(usuarios);
     }
+    [Fact]
+
+
+    public void Transferencia()
+    {
+        var usuariosMoneda1 = _repo.ObtenerPorCondicionUsuarioMoneda("idUsuario = 2 AND cantidad >= 0.5");
+
+        Assert.NotEmpty(usuariosMoneda1);
+
+        _repo.Transferencia(2, 0.5m, 2, 6);
+
+        var usuariosMoneda2 = _repo.ObtenerPorCondicionUsuarioMoneda("idUsuario = 6 AND cantidad = 0.5");
+        Assert.NotEmpty(usuariosMoneda2);
+    }
+
+        [Fact]
+        public void TransferenciaFAIL()
+    {
+
+        var error =  Assert.Throws<MySqlException> (()=>_repo.Transferencia(2, 0.5m, 8, 6));
+        Assert.Equal("Cantidad Insuficiente!", error.Message);
+
+    }
+
 }

@@ -2,8 +2,10 @@ namespace MarketWeight.Core
 {
     public class UsuarioMoneda
     {
-        public required Usuario Usuario { get; set; }
-        public required Moneda Moneda { get; set; }
-        public required decimal Cantidad { get; set; }
+
+        public  UInt128 idUsuario { get; set; }
+        public UInt128 idMoneda { get; set; }
+        public decimal Cantidad { get; set; }
     }
 }
+

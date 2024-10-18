@@ -43,6 +43,13 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
         return usuarios;
     }
 
+    public IEnumerable<UsuarioMoneda> ObtenerUsuarioMoneda()
+    {
+        var consulta = "SELECT * FROM UsuarioMoneda";
+        var usuariosMoneda = Conexion.Query<UsuarioMoneda>(consulta);
+        return usuariosMoneda;
+    }
+
 
 
     public Usuario? Detalle(uint indiceABuscar)
@@ -71,6 +78,16 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
         Conexion.Execute("ComprarMoneda", parametros);
     }
 
+    public void Transferencia( uint idmoneda, decimal cantidad, uint idusuarioTransfiere, uint idusuarioTransferido){
+        var parametros = new DynamicParameters();
+        parametros.Add("@xidMoneda", idmoneda);
+        parametros.Add("@xcantidad", cantidad);
+        parametros.Add("@xidUsuarioTransfiere", idusuarioTransfiere); 
+        parametros.Add("@xidUsuarioTransferido", idusuarioTransferido);
+
+        Conexion.Execute("Transferencia", parametros);
+    }
+
     public void Vender(uint idusuario, decimal cantidad, uint idmoneda)
     {
 
@@ -87,5 +104,12 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
         var consulta = $"SELECT U.nombre, U.saldo FROM Usuario U WHERE {condicion}";
         var usuarios = Conexion.Query<Usuario>(consulta);
         return usuarios;
+    }
+
+        public IEnumerable<UsuarioMoneda> ObtenerPorCondicionUsuarioMoneda (string condicion)
+    {
+        var consulta = $"SELECT UM.idUsuario, UM.cantidad FROM UsuarioMoneda UM WHERE {condicion}";
+        var usuariosMonedas = Conexion.Query<UsuarioMoneda>(consulta);
+        return usuariosMonedas;
     }
 }

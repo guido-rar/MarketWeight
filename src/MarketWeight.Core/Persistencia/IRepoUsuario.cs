@@ -13,7 +13,13 @@ public interface IRepoUsuario :
 
     public void Ingreso(uint idusuario, decimal saldo)
     {}
+    public void Transferencia( uint idmoneda, decimal cantidad, uint idusuarioTransfiere, uint idusuarioTransferido)
+    {}
 
     public IEnumerable<Usuario> ObtenerPorCondicion (string condicion);
+
+    public IEnumerable<UsuarioMoneda> ObtenerUsuarioMoneda();
+
+    public IEnumerable<UsuarioMoneda> ObtenerPorCondicionUsuarioMoneda (string condicion);
 
 }
