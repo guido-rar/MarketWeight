@@ -121,7 +121,7 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
             and = true;
         }
 
-        else if (Convert.ToBoolean(cantidad))
+        else if (cantidad is not null)
         {
             if (and)
                 consulta += " AND";

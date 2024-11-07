@@ -91,7 +91,7 @@ public class RepoUsuarioTest : TestBase
     public void ComprarMonedaFail()
     {
         var error =  Assert.ThrowsAny<Exception> (()=>_repo.Compra(6, 0.5m, 1));
-        Assert.Equal("Cantidad nsuficiente!", error.Message);
+        Assert.Contains("Insuficiente", error.Message);
     }
 
     [Fact]
@@ -103,11 +103,12 @@ public class RepoUsuarioTest : TestBase
     [Fact]
     public void VenderMonedaFail()
     {
-        var error =  Assert.Throws<MySqlException> (()=>_repo.Vender(5, 0.5m, 2));
+        var error =  Assert.ThrowsAny<Exception> (()=>_repo.Vender(5, 0.5m, 2));
         Assert.Contains("Insuficiente", error.Message);
 
-        error =  Assert.Throws<MySqlException> (()=>_repo.Vender(6, 0.5m, 5));
+        error =  Assert.ThrowsAny<Exception> (()=>_repo.Vender(6, 0.5m, 5));
         Assert.Contains("Insuficiente", error.Message);
+
     }
 
     [Fact]

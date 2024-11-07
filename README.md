@@ -5,7 +5,7 @@
 
 ## Computación 2024
 
-**Asignatura**: Base de Datos
+**Asignatura**: Administracion y Gestion de Base de Datos
 
 **Curso**: 5° 8°
 
@@ -22,11 +22,31 @@ git clone https://github.com/carlete-afk/MarketWeight
 
 ### Pre-requisitos 📋
 
+- [Visual Studio Code](https://code.visualstudio.com/download)
 - [.NET 8.0](https://dotnet.microsoft.com/es-es/download/dotnet/8.0).
+
+- [MySQL WorkBench](https://dev.mysql.com/downloads/workbench/)
+
 
 ## Despliegue 📦
 
-_En construcción_
+- Para poder correr estos scripts ejecuta el siguiente comando dentro de la terminal integrada de la carpeta `scripts.sql`
+
+```shell
+mysql -u tuUsuario -p
+```
+
+- Una vez loggeado ejecute el siguiente comando para crear la BD.
+
+```shell
+source Install.sql
+```
+
+- Ahora desde la carpeta `MarketWeight.Ado.Dapper.Test` puede correr cualquier prueba o en la terminal integrada escribir este comando para correrlas al mismo tiempo.
+
+```shell
+dotnet test -v d
+```
 
 ## Construido con 🛠️
 
