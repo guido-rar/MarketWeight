@@ -20,6 +20,6 @@ public interface IRepoUsuario :
 
     public IEnumerable<UsuarioMoneda> ObtenerUsuarioMoneda();
 
-    public IEnumerable<UsuarioMoneda> ObtenerPorCondicionUsuarioMoneda (string condicion);
+    public IEnumerable<UsuarioMoneda> ObtenerPorCondicionUsuarioMoneda (uint? userid, decimal? cantidad);
 
 }

@@ -106,9 +106,32 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
         return usuarios;
     }
 
-        public IEnumerable<UsuarioMoneda> ObtenerPorCondicionUsuarioMoneda (string condicion)
+    public IEnumerable<UsuarioMoneda> ObtenerPorCondicionUsuarioMoneda (uint? userid, decimal? cantidad)
     {
-        var consulta = $"SELECT UM.idUsuario, UM.cantidad FROM UsuarioMoneda UM WHERE {condicion}";
+        var consulta = "SELECT UM.idUsuario, UM.cantidad FROM UsuarioMoneda UM WHERE";
+        var and = false;
+
+        if (userid is not null)
+        {
+            if (and)
+                consulta += " AND";
+
+            consulta += $" idUsuario = {userid}";
+
+            and = true;
+        }
+
+        else if (Convert.ToBoolean(cantidad))
+        {
+            if (and)
+                consulta += " AND";
+                
+            consulta += $" cantidad = {cantidad}";
+        }
+
+        else
+            throw new ArgumentException($"No se pasaron parámetros.");
+
         var usuariosMonedas = Conexion.Query<UsuarioMoneda>(consulta);
         return usuariosMonedas;
     }

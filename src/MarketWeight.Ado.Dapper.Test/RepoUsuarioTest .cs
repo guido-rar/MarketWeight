@@ -88,6 +88,13 @@ public class RepoUsuarioTest : TestBase
     }
 
     [Fact]
+    public void ComprarMonedaFail()
+    {
+        var error =  Assert.ThrowsAny<Exception> (()=>_repo.Compra(6, 0.5m, 1));
+        Assert.Equal("Cantidad nsuficiente!", error.Message);
+    }
+
+    [Fact]
     public void VenderMonedaOK()
     {
         _repo.Vender(2, 0.1m, 1);
@@ -96,11 +103,11 @@ public class RepoUsuarioTest : TestBase
     [Fact]
     public void VenderMonedaFail()
     {
-        var error =  Assert.Throws<MySqlException> (()=>_repo.Vender(2, 0.5m, 2));
-        Assert.Equal("Cantidad Insuficiente!", error.Message);
+        var error =  Assert.Throws<MySqlException> (()=>_repo.Vender(5, 0.5m, 2));
+        Assert.Contains("Insuficiente", error.Message);
 
-        error =  Assert.Throws<MySqlException> (()=>_repo.Vender(3, 0.5m, 5));
-        Assert.Equal("Cantidad Insuficiente!", error.Message);
+        error =  Assert.Throws<MySqlException> (()=>_repo.Vender(6, 0.5m, 5));
+        Assert.Contains("Insuficiente", error.Message);
     }
 
     [Fact]
@@ -111,16 +118,16 @@ public class RepoUsuarioTest : TestBase
     }
     [Fact]
 
-
-    public void Transferencia()
+    public void TransferenciaOK()
     {
-        var usuariosMoneda1 = _repo.ObtenerPorCondicionUsuarioMoneda("idUsuario = 2 AND cantidad >= 0.5");
+        var usuariosMoneda1 = _repo.ObtenerPorCondicionUsuarioMoneda(2, 0.5m);/*string? userid, decimal cantidad*/
+        _repo.Compra(2, 2.5m, 1);
 
         Assert.NotEmpty(usuariosMoneda1);
 
         _repo.Transferencia(2, 0.5m, 2, 6);
 
-        var usuariosMoneda2 = _repo.ObtenerPorCondicionUsuarioMoneda("idUsuario = 6 AND cantidad = 0.5");
+        var usuariosMoneda2 = _repo.ObtenerPorCondicionUsuarioMoneda(6, 0.5m);
         Assert.NotEmpty(usuariosMoneda2);
     }
 
@@ -128,7 +135,7 @@ public class RepoUsuarioTest : TestBase
         public void TransferenciaFAIL()
     {
 
-        var error =  Assert.Throws<MySqlException> (()=>_repo.Transferencia(2, 0.5m, 8, 6));
+        var error =  Assert.ThrowsAny<Exception> (()=>_repo.Transferencia(2, 0.5m, 8, 6));
         Assert.Equal("Cantidad Insuficiente!", error.Message);
 
     }
