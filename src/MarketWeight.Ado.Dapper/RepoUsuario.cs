@@ -50,14 +50,16 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
         return usuariosMoneda;
     }
 
-
-
     public Usuario? Detalle(uint indiceABuscar)
     {
         var consulta = $"SELECT * FROM Usuario WHERE idUsuario = {indiceABuscar}";
         var usuarios = Conexion.QueryFirstOrDefault<Usuario>(consulta);
+
         return usuarios;
     }
+
+    
+
     public void Ingreso(uint idusuario, decimal saldo)
     {
 
@@ -134,5 +136,34 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
 
         var usuariosMonedas = Conexion.Query<UsuarioMoneda>(consulta);
         return usuariosMonedas;
+    }
+
+    private static readonly string _queryDetalle = @"
+            SELECT  *
+            FROM    Usuario
+            WHERE   idUsuario = @xidUsuario;
+
+            SELECT  *
+            FROM    UsuarioMoneda UM
+            JOIN    Moneda M USING (idMoneda)
+            WHERE   idUsuario = @xidUsuario;
+
+            SELECT  *
+            FROM    Historial H
+            WHERE   idUsuario = @xidUsuario;
+        ";
+
+    public Usuario? DetalleCompleto(uint idUsuario)
+    {
+        using (var multi = Conexion.QueryMultiple(_queryDetalle, new { xidUsuario = idUsuario }))
+        {
+            var usuario = multi.ReadSingleOrDefault<Usuario>();
+
+            if (usuario is not null)
+                usuario.Billetera = multi.Read<UsuarioMoneda>().ToList();
+                usuario.Transacciones = multi.Read<Historial>().ToList();
+
+            return usuario;
+        }
     }
 }

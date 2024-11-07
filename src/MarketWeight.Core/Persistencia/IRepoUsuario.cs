@@ -22,4 +22,6 @@ public interface IRepoUsuario :
 
     public IEnumerable<UsuarioMoneda> ObtenerPorCondicionUsuarioMoneda (uint? userid, decimal? cantidad);
 
+    public Usuario? DetalleCompleto(uint idUsuario);
+
 }

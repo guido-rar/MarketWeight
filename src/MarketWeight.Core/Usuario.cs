@@ -7,5 +7,5 @@ public class Usuario
     public required string Password { get; set; }
     public  decimal Saldo { get; set; }
     public List<Historial>? Transacciones { get; set; }
-    private List<UsuarioMoneda>? Billetera { get; set; }
+    public List<UsuarioMoneda>? Billetera { get; set; }
 }

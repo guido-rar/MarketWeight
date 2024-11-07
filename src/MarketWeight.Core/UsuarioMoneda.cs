@@ -3,8 +3,8 @@ namespace MarketWeight.Core
     public class UsuarioMoneda
     {
 
-        public  UInt128 idUsuario { get; set; }
-        public UInt128 idMoneda { get; set; }
+        public  uint idUsuario { get; set; }
+        public uint idMoneda { get; set; }
         public decimal Cantidad { get; set; }
     }
 }

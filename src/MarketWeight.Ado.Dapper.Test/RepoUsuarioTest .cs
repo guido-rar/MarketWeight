@@ -1,3 +1,4 @@
+using System.Formats.Asn1;
 using MarketWeight.Core;
 using MarketWeight.Core.Persistencia;
 using MySqlConnector;
@@ -138,6 +139,26 @@ public class RepoUsuarioTest : TestBase
 
         var error =  Assert.ThrowsAny<Exception> (()=>_repo.Transferencia(2, 0.5m, 8, 6));
         Assert.Equal("Cantidad Insuficiente!", error.Message);
+
+    }
+
+     [Fact]
+    public void DetalleCompletoOK()
+    {
+        var usuario =_repo.DetalleCompleto(1);
+        Assert.NotNull(usuario);
+
+    }
+
+    [Fact]
+    public void DetalleCompletoBilleteraOK()
+    {
+        var usuario =_repo.DetalleCompleto(2);
+        Assert.NotNull(usuario);
+        Assert.NotNull(usuario.Billetera);
+        Assert.NotNull(usuario.Transacciones);
+        Assert.NotEmpty(usuario.Billetera);
+        Assert.NotEmpty(usuario.Transacciones);
 
     }
 
