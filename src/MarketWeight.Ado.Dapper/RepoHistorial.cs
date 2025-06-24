@@ -49,4 +49,41 @@ public class RepoHistorial : RepoGenerico, IRepoHistorial
         return registros;
     }
     
+    /*async*/
+    public async Task AltaAsync(Historial historial)
+    {
+        var parametros = new DynamicParameters();
+        parametros.Add("@xidMoneda", historial.idMoneda);
+        parametros.Add("@xcantidad", historial.Cantidad);
+        parametros.Add("@xcompra", historial.Compra);
+        parametros.Add("@xidUsuario", historial.IdUsuario);
+
+        try
+        {
+            await Conexion.ExecuteAsync("AltaHistorial", parametros);
+        }
+        catch (DbException e)
+        {
+            //DuplicateKeyEntry   
+            if (e.ErrorCode == 1062)
+            {
+                throw new ConstraintException($"Este registro ya se hizo anteriormente.");
+            }
+            throw;
+        }   
+    }
+
+    public async Task<Historial?> DetalleAsync(uint indiceABuscar)
+    {
+        var consulta = $"SELECT * FROM Moneda WHERE idMoneda = {indiceABuscar}";
+        var registro = await Conexion.QueryFirstOrDefaultAsync<Historial>(consulta);
+        return registro;
+    }
+
+    public async Task<IEnumerable<Historial>> ObtenerAsync()
+    {
+        var consulta = "SELECT * FROM Usuario";
+        var registros = await Conexion.QueryAsync<Historial>(consulta);
+        return registros;
+    }
 }
