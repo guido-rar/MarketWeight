@@ -167,7 +167,7 @@ public class RepoUsuarioTest : TestBase
 
     public async Task TraerOKAsync()
     {
-        var usuarios = await _repo.Obtener();
+        var usuarios = await _repo.ObtenerAsync();
         
         Assert.NotEmpty(usuarios);
         Assert.Contains(usuarios,
@@ -178,13 +178,13 @@ public class RepoUsuarioTest : TestBase
 
     public async Task IngresarDineroOKAsync()
     {
-        await _repo.Ingreso(1, 7707m);
+        await _repo.IngresoAsync(1, 7707m);
 
-        await _repo.Ingreso(2, 420m);
+        await _repo.IngresoAsync(2, 420m);
 
-        await _repo.Ingreso(3, 5000m);
+        await _repo.IngresoAsync(3, 5000m);
 
-        await _repo.Ingreso(4, 6666m);
+        await _repo.IngresoAsync(4, 6666m);
 
     }
 
@@ -224,42 +224,42 @@ public class RepoUsuarioTest : TestBase
         };
 
 
-        await _repo.Alta(usuarioWalter);
-        await _repo.Alta(usuarioJorge);
-        await _repo.Alta(usuarioGuido);
-        await _repo.Alta(usuarioCarlos);
+        await _repo.AltaAsync(usuarioWalter);
+        await _repo.AltaAsync(usuarioJorge);
+        await _repo.AltaAsync(usuarioGuido);
+        await _repo.AltaAsync(usuarioCarlos);
     }
 
     [Fact]
     public async Task ComprarMonedaOKAsync()
     {
-        await _repo.Compra(3, 0.5m, 2);
+        await _repo.CompraAsync(3, 0.5m, 2);
 
-        await _repo.Compra(2, 1m, 3);
+        await _repo.CompraAsync(2, 1m, 3);
 
-        await _repo.Compra(2, 0.5m, 1);
+        await _repo.CompraAsync(2, 0.5m, 1);
     }
 
     [Fact]
     public async Task ComprarMonedaFailAsync()
     {
-        var error =  Assert.ThrowsAnyAsync<Exception> (()=>await _repo.Compra(6, 0.5m, 1));
+        var error =  await Assert.ThrowsAnyAsync<Exception> (async ()=>await _repo.CompraAsync(6, 0.5m, 1));
         Assert.Contains("Insuficiente", error.Message);
     }
 
     [Fact]
     public async Task VenderMonedaOKAsync()
     {
-        await _repo.Vender(2, 0.1m, 1);
+        await _repo.VenderAsync(2, 0.1m, 1);
     }
 
     [Fact]
     public async Task VenderMonedaFailAsync()
     {
-        var error =  Assert.ThrowsAnyAsync<Exception> (()=>await _repo.Vender(5, 0.5m, 2));
+        var error = await Assert.ThrowsAnyAsync<Exception> (async ()=>await _repo.VenderAsync(5, 0.5m, 2));
         Assert.Contains("Insuficiente", error.Message);
 
-        error =  Assert.ThrowsAnyAsync<Exception> (()=>await _repo.Vender(6, 0.5m, 5));
+        error = await Assert.ThrowsAnyAsync<Exception> (async ()=>await _repo.VenderAsync(6, 0.5m, 5));
         Assert.Contains("Insuficiente", error.Message);
 
     }
@@ -267,21 +267,21 @@ public class RepoUsuarioTest : TestBase
     [Fact]
     public async Task ObtenerPorCondicionOKAsync()
     {
-        var usuarios = await _repo.ObtenerPorCondicion("saldo >= 1000");
+        var usuarios = await _repo.ObtenerPorCondicionAsync("saldo >= 1000");
         Assert.NotEmpty(usuarios);
     }
     [Fact]
 
     public async Task TransferenciaOKAsync()
     {
-        var usuariosMoneda1 = await _repo.ObtenerPorCondicionUsuarioMoneda(2, 0.5m);/*string? userid, decimal cantidad*/
-        await _repo.Compra(2, 2.5m, 1);
+        var usuariosMoneda1 = await _repo.ObtenerPorCondicionUsuarioMonedaAsync(2, 0.5m);/*string? userid, decimal cantidad*/
+        await _repo.CompraAsync(2, 2.5m, 1);
 
         Assert.NotEmpty(usuariosMoneda1);
 
-        await _repo.Transferencia(2, 0.5m, 2, 6);
+        await _repo.TransferenciaAsync(2, 0.5m, 2, 6);
 
-        var usuariosMoneda2 = await _repo.ObtenerPorCondicionUsuarioMoneda(6, 0.5m);
+        var usuariosMoneda2 = await _repo.ObtenerPorCondicionUsuarioMonedaAsync(6, 0.5m);
         Assert.NotEmpty(usuariosMoneda2);
     }
 
@@ -289,7 +289,7 @@ public class RepoUsuarioTest : TestBase
         public async Task TransferenciaFAILAsync()
     {
 
-        var error =  Assert.ThrowsAny<Exception> (()=>await _repo.Transferencia(2, 0.5m, 8, 6));
+        var error = await Assert.ThrowsAnyAsync<Exception> (async()=>await _repo.TransferenciaAsync(2, 0.5m, 8, 6));
         Assert.Equal("Cantidad Insuficiente!", error.Message);
 
     }
@@ -297,7 +297,7 @@ public class RepoUsuarioTest : TestBase
      [Fact]
     public async Task DetalleCompletoOKAsync()
     {
-        var usuario =await _repo.DetalleCompleto(1);
+        var usuario =await _repo.DetalleCompletoAsync(1);
         Assert.NotNull(usuario);
 
     }
@@ -305,13 +305,12 @@ public class RepoUsuarioTest : TestBase
     [Fact]
     public async Task DetalleCompletoBilleteraOKAsync()
     {
-        var usuario =await _repo.DetalleCompleto(2);
+        var usuario =await _repo.DetalleCompletoAsync(2);
         Assert.NotNull(usuario);
         Assert.NotNull(usuario.Billetera);
         Assert.NotNull(usuario.Transacciones);
         Assert.NotEmpty(usuario.Billetera);
         Assert.NotEmpty(usuario.Transacciones);
-
     }
 
 }

@@ -169,7 +169,7 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
 
     /*async*/
 
-        public async Task AltaAsync(Usuario usuario)
+    public async Task AltaAsync(Usuario usuario)
     {
 
         var parametros = new DynamicParameters();
