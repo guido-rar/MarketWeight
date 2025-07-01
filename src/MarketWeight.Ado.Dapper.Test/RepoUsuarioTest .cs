@@ -191,43 +191,43 @@ public class RepoUsuarioTest : TestBase
     [Fact]
     public async Task AltaUsuarioOKAsync()
     {
-        Usuario usuarioWalter = new()
+        Usuario usuarioWalterAsync = new()
         {
-            Nombre = "Walte",
-            Apellido = "Beníte",
-            Email = "waltercoocker@gmail.com",
+            Nombre = "WalteAsync",
+            Apellido = "BeníteAsync",
+            Email = "waltercoockerAsync@gmail.com",
             Password = "314159265358979"
         };
 
-        Usuario usuarioJorge = new()
+        Usuario usuarioJorgeAsync = new() 
         {
-            Nombre = "Jorge",
-            Apellido = "Casco",
-            Email = "JorgeCasco@gmail.com",
+            Nombre = "JorgeAsync",
+            Apellido = "CascoAsync",
+            Email = "JorgeCascoAsync@gmail.com",
             Password = "jorge123"
         };
 
-        Usuario usuarioGuido = new()
+        Usuario usuarioGuidoAsync = new()
         {
-            Nombre = "Guido",
-            Apellido = "Gavilán",
-            Email = "guidopepin@gmail.com",
+            Nombre = "GuidoAsync",
+            Apellido = "GavilánAsync",
+            Email = "guidopepinAsync@gmail.com",
             Password = "guidopepin123"
         };
 
-        Usuario usuarioCarlos = new()
+        Usuario usuarioCarlosAsync = new()
         {
-            Nombre = "Carlos",
-            Apellido = "Bello",
-            Email = "carloselbello@gmail.com",
+            Nombre = "CarlosAsync",
+            Apellido = "BelloAsync",
+            Email = "carloselbelloAsync@gmail.com",
             Password = "carlos123"
         };
 
 
-        await _repo.AltaAsync(usuarioWalter);
-        await _repo.AltaAsync(usuarioJorge);
-        await _repo.AltaAsync(usuarioGuido);
-        await _repo.AltaAsync(usuarioCarlos);
+        await _repo.AltaAsync(usuarioWalterAsync);
+        await _repo.AltaAsync(usuarioJorgeAsync);
+        await _repo.AltaAsync(usuarioGuidoAsync);
+        await _repo.AltaAsync(usuarioCarlosAsync);
     }
 
     [Fact]

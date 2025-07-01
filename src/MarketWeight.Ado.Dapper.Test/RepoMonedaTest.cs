@@ -81,22 +81,22 @@ public class RepoMonedaTest : TestBase
 
     public async Task CrearMonedaOKAsync()
     {
-        Moneda monedaPepe = new Moneda
+        Moneda monedaPepeAsync = new Moneda
         {
             Precio = 10m,
             Cantidad = 2m,
-            Nombre = "pepe"
+            Nombre = "pepeAsync"
         };
 
-        Moneda monedaVirgo = new Moneda
+        Moneda monedaVirgoAsync = new Moneda
         {
             Precio = 300m,
             Cantidad = 5000m,
-            Nombre = "VirgoCoin"
+            Nombre = "VirgoCoinAsync"
         };
 
-        await _repo.Alta(monedaPepe);
-        await _repo.Alta(monedaVirgo);
+        await _repo.AltaAsync(monedaPepeAsync);
+        await _repo.AltaAsync(monedaVirgoAsync);
         
     }
 
@@ -117,17 +117,17 @@ public class RepoMonedaTest : TestBase
             Nombre = "Litecoin"
         };
 
-        var error =  Assert.ThrowsAsync<MySqlException> (()=> await _repo.Alta(monedaDoge));
+        var error =  await Assert.ThrowsAsync<MySqlException> (async()=> await _repo.AltaAsync(monedaDoge));
         Assert.Equal("Moneda ya registrada :v", error.Message);
 
-        error =  Assert.ThrowsAsync<MySqlException> (()=>await _repo.Alta(monedaLitecoin));
+        error =  await Assert.ThrowsAsync<MySqlException> (async()=>await _repo.AltaAsync(monedaLitecoin));
         Assert.Equal("Moneda ya registrada :v", error.Message);
     }
 
     [Fact]
     public async Task TraerOKAsync()
     {
-        var monedas = await _repo.Obtener();
+        var monedas = await _repo.ObtenerAsync();
         
         Assert.NotEmpty(monedas);
         Assert.Contains(monedas,
@@ -137,7 +137,7 @@ public class RepoMonedaTest : TestBase
     [Fact]
     public async Task ObtenerConCondicionOKAsync()
     {
-        var monedas = await _repo.ObtenerConCondicion("precio >= 100");
+        var monedas = await _repo.ObtenerConCondicionAsync("precio >= 100");
 
         Assert.NotEmpty(monedas);
     }
