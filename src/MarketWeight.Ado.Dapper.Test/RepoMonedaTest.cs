@@ -74,6 +74,8 @@ public class RepoMonedaTest : TestBase
 
         Assert.NotEmpty(monedas);
     }
+
+    
     /*Async*/
     [Fact]
 
@@ -133,9 +135,9 @@ public class RepoMonedaTest : TestBase
     }
     
     [Fact]
-    public void ObtenerConCondicionOKAsync()
+    public async Task ObtenerConCondicionOKAsync()
     {
-        var monedas = await +_repo.ObtenerConCondicion("precio >= 100");
+        var monedas = await _repo.ObtenerConCondicion("precio >= 100");
 
         Assert.NotEmpty(monedas);
     }
