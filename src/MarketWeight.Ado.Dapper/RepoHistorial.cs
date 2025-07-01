@@ -86,4 +86,11 @@ public class RepoHistorial : RepoGenerico, IRepoHistorial
         var registros = await Conexion.QueryAsync<Historial>(consulta);
         return registros;
     }
+
+        public Task<IEnumerable<Historial>> ObtenerAsync()
+    {
+        var consulta = "SELECT * FROM Usuario";
+        var registros = await Conexion.QueryAsync<Historial>(consulta);
+        return registros;
+    }
 }
