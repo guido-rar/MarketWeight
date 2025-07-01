@@ -20,10 +20,10 @@ public class RepoHistorialTest : TestBase
     }
 
     /*async*/
-        [Fact]
-    public Task TraerOKAsync()
+    [Fact]
+    public async Task TraerOKAsync()
     {
-        var historiales = _repo.ObtenerAsync();
+        var historiales = await _repo.ObtenerAsync();
         
         Assert.NotEmpty(historiales);
         Assert.Contains(historiales,
