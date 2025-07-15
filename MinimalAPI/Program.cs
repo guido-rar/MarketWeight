@@ -3,6 +3,7 @@ using MarketWeight.Ado.Dapper;
 using MarketWeight.Core.Persistencia;
 using MySqlConnector;
 using System.Data;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,20 @@ builder.Services.AddScoped<IDbConnection>(_ => new MySqlConnection(connectionStr
 builder.Services.AddScoped<IRepoUsuario, RepoUsuario>();
 builder.Services.AddScoped<IRepoMoneda, RepoMoneda>();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger(options =>
+    {
+        options.RouteTemplate = "/openapi/{documentName}.json";
+    });
+    app.UseSwaggerUI();
+    app.MapScalarApiReference();
+}
 // Endpoints para Usuario
 app.MapGet("/usuarios", (IRepoUsuario repo) => repo.Obtener());
 
