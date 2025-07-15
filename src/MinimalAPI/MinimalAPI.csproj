@@ -1,11 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <ProjectReference Include="..\src\MarketWeight.Ado.Dapper\MarketWeight.Ado.Dapper.csproj" />
-    <ProjectReference Include="..\src\MarketWeight.Core\MarketWeight.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MySqlConnector" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.16" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.6.1" />
@@ -14,9 +9,20 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="AppSetting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarketWeight.Core\MarketWeight.Core.csproj" />
+    <ProjectReference Include="..\MarketWeight.Ado.Dapper\MarketWeight.Ado.Dapper.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ using MySqlConnector;
 using System.Data;
 using Scalar.AspNetCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuración de la cadena de conexión
@@ -26,7 +27,6 @@ if (app.Environment.IsDevelopment())
     {
         options.RouteTemplate = "/openapi/{documentName}.json";
     });
-    app.UseSwaggerUI();
     app.MapScalarApiReference();
 }
 // Endpoints para Usuario

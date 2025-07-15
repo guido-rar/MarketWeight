@@ -87,4 +87,13 @@ public class RepoHistorial : RepoGenerico, IRepoHistorial
         return registros;
     }
 
+    Historial IRepoAlta<Historial>.Alta(Historial elemento)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<Historial> IRepoAlta<Historial>.AltaAsync(Historial elemento)
+    {
+        throw new NotImplementedException();
+    }
 }
