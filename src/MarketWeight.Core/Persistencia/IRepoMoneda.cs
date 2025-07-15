@@ -5,14 +5,11 @@ public interface IRepoMoneda :
     IRepoListado<Moneda>,
     IRepoDetalle<Moneda, uint>
 {
-    public IEnumerable<Moneda> ObtenerConCondicion(string condicion);
+    IEnumerable<Moneda> ObtenerConCondicion(string condicion);
 
-    /*async*/
-    public Task AltaAsync(Moneda moneda);
-
-    public Task<Moneda?> DetalleAsync(uint indiceABuscar);
-
-    public Task <IEnumerable<Moneda>> ObtenerAsync();
-
-    public Task<IEnumerable<Moneda>> ObtenerConCondicionAsync(string condicion);
+    
+    Task<Moneda> AltaAsync(Moneda moneda);   
+    Task<IEnumerable<Moneda>> ObtenerAsync();
+    Task<Moneda?> DetalleAsync(uint indiceABuscar);
+    Task<IEnumerable<Moneda>> ObtenerConCondicionAsync(string condicion);
 }

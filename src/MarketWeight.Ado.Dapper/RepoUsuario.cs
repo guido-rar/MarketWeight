@@ -13,28 +13,31 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
     }
 
 
-    public void Alta(Usuario usuario)
+    public Usuario Alta(Usuario usuario)
     {
-
         var parametros = new DynamicParameters();
         parametros.Add("@xnombre", usuario.Nombre);
         parametros.Add("@xapellido", usuario.Apellido);
         parametros.Add("@xemail", usuario.Email);
         parametros.Add("@xpass", usuario.Password);
+
         try
         {
-            Conexion.Execute("AltaUsuario", parametros);
+            
+            var id = Conexion.QuerySingle<uint>("AltaUsuario", parametros, commandType: CommandType.StoredProcedure);
+            usuario.idUsuario = id; 
+            return usuario;
         }
         catch (DbException e)
         {
-            //DuplicateKeyEntry   
             if (e.ErrorCode == 1062)
             {
-                throw new ConstraintException($"El Usuario {usuario.Nombre} ya ha sido ingresada.");
+                throw new ConstraintException($"El Usuario {usuario.Nombre} ya ha sido ingresado.");
             }
             throw;
         }
     }
+
 
     public IEnumerable<Usuario> Obtener()
     {
@@ -169,21 +172,27 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
 
     /*async*/
 
-    public async Task AltaAsync(Usuario usuario)
+    public async Task<Usuario> AltaAsync(Usuario usuario)
     {
-
         var parametros = new DynamicParameters();
         parametros.Add("@xnombre", usuario.Nombre);
         parametros.Add("@xapellido", usuario.Apellido);
         parametros.Add("@xemail", usuario.Email);
         parametros.Add("@xpass", usuario.Password);
+
         try
         {
-            await Conexion.ExecuteAsync("AltaUsuario", parametros);
+            var id = await Conexion.QuerySingleAsync<uint>(
+                "AltaUsuario",
+                parametros,
+                commandType: CommandType.StoredProcedure
+            );
+
+            usuario.idUsuario = id;
+            return usuario;
         }
         catch (DbException e)
         {
-            //DuplicateKeyEntry   
             if (e.ErrorCode == 1062)
             {
                 throw new ConstraintException($"El Usuario {usuario.Nombre} ya ha sido ingresada.");
@@ -191,6 +200,8 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
             throw;
         }
     }
+
+
 
     public async Task<IEnumerable<Usuario>> ObtenerAsync()
     {

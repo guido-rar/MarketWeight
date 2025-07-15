@@ -13,7 +13,7 @@ public class RepoMoneda : RepoGenerico, IRepoMoneda
     {
     }
 
-    public void Alta(Moneda moneda)
+    public Moneda Alta(Moneda moneda)
     {
         var parametros = new DynamicParameters();
         parametros.Add("@xprecio", moneda.Precio);
@@ -22,15 +22,15 @@ public class RepoMoneda : RepoGenerico, IRepoMoneda
 
         try
         {
-            Conexion.Execute("AltaCriptoMoneda", parametros);
+            // Ejecuta el SP y obtiene el último ID insertado
+            var id = Conexion.QuerySingle<uint>("AltaCriptoMoneda", parametros, commandType: CommandType.StoredProcedure);
+            moneda.idMoneda = id;
+            return moneda;
         }
         catch (DbException e)
         {
-            //DuplicateKeyEntry   
             if (e.ErrorCode == 1062)
-            {
                 throw new ConstraintException($"La moneda {moneda.Nombre} ya ha sido ingresada.");
-            }
             throw;
         }
     }
@@ -58,7 +58,7 @@ public class RepoMoneda : RepoGenerico, IRepoMoneda
 
     /*Async*/
 
-    public async Task AltaAsync(Moneda moneda)
+    public async Task<Moneda> AltaAsync(Moneda moneda)
     {
         var parametros = new DynamicParameters();
         parametros.Add("@xprecio", moneda.Precio);
@@ -67,15 +67,18 @@ public class RepoMoneda : RepoGenerico, IRepoMoneda
 
         try
         {
-            await Conexion.ExecuteAsync("AltaCriptoMoneda", parametros);
+            var id = await Conexion.QuerySingleAsync<uint>(
+                "AltaCriptoMoneda",
+                parametros,
+                commandType: CommandType.StoredProcedure
+            );
+            moneda.idMoneda = id;
+            return moneda;
         }
         catch (DbException e)
         {
-            //DuplicateKeyEntry   
             if (e.ErrorCode == 1062)
-            {
                 throw new ConstraintException($"La moneda {moneda.Nombre} ya ha sido ingresada.");
-            }
             throw;
         }
     }

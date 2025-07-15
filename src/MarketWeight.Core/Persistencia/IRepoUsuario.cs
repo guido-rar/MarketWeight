@@ -5,6 +5,8 @@ public interface IRepoUsuario :
     IRepoListado<Usuario>,
     IRepoDetalle<Usuario, uint>
 {
+    public Usuario Alta(Usuario usuario);
+
     public void Compra(uint idusuario, decimal cantidad, uint idmoneda);
 
     public void Vender(uint idusuario, decimal cantidad, uint idmoneda);
@@ -22,7 +24,7 @@ public interface IRepoUsuario :
 
     /*async*/
     
-    public Task AltaAsync(Usuario usuario);
+    public Task<Usuario> AltaAsync(Usuario usuario);
     public Task<IEnumerable<Usuario>> ObtenerAsync();
     public Task<IEnumerable<UsuarioMoneda>> ObtenerUsuarioMonedaAsync();
     public Task<Usuario?> DetalleAsync(uint indiceABuscar);

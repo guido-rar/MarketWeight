@@ -6,13 +6,16 @@ CREATE PROCEDURE `AltaCriptoMoneda`(xprecio DECIMAL(20,10), xcantidad DECIMAL(20
 BEGIN
        INSERT INTO `Moneda` (precio, cantidad, nombre)
            VALUES(xprecio, xcantidad, xnombre);
+       SELECT LAST_INSERT_ID() AS idMoneda;
 END $$
 
 DROP PROCEDURE IF EXISTS AltaUsuario $$
 CREATE PROCEDURE `AltaUsuario`(xnombre VARCHAR(45), xapellido  VARCHAR(45), xemail  VARCHAR(45), xpass CHAR(64) )
 BEGIN
        INSERT INTO `Usuario` (nombre, apellido, email, pass, saldo)
-           VALUES(xnombre, xapellido, xemail, xpass, 0.0);
+              VALUES(xnombre, xapellido, xemail, xpass, 0.0);
+
+       SELECT LAST_INSERT_ID() AS idUsuario;
 END $$
 
 DROP PROCEDURE IF EXISTS ComprarMoneda $$
@@ -75,7 +78,9 @@ DROP PROCEDURE IF EXISTS AltaHistorial $$
 CREATE PROCEDURE `AltaHistorial`(xidMoneda INT UNSIGNED, xcantidad DECIMAL(20,10) UNSIGNED, xcompra TINYINT UNSIGNED, xidUsuario INT UNSIGNED)
 BEGIN
        INSERT INTO `Historial` (idMoneda, cantidad, fechaHora, compra, idUsuario)
-           VALUES(xidMoneda, xcantidad, NOW(), xcompra, xidUsuario);
+              VALUES(xidMoneda, xcantidad, NOW(), xcompra, xidUsuario);
+       
+       SELECT LAST_INSERT_ID() AS idHistorial;
 END $$
 
 DROP PROCEDURE IF EXISTS Transferencia $$

@@ -2,5 +2,6 @@ namespace MarketWeight.Core.Persistencia;
 
 public interface IRepoAlta<T>
 {
-    void Alta(T elemento);
+    T Alta(T elemento);
+    Task<T> AltaAsync(T elemento);
 }
