@@ -15,16 +15,17 @@ CREATE PROCEDURE `AltaUsuario`(
     IN xnombre VARCHAR(45),
     IN xapellido VARCHAR(45),
     IN xemail VARCHAR(45),
-    IN xpass CHAR(64)
+    IN xpass CHAR(64),
+    IN xsaldo DECIMAL(20,10)
 )
 BEGIN
     IF xidUsuario IS NULL OR xidUsuario = 0 THEN
         INSERT INTO `Usuario` (nombre, apellido, email, pass, saldo)
-        VALUES (xnombre, xapellido, xemail, xpass, 0.0);
+        VALUES (xnombre, xapellido, xemail, xpass, xsaldo);
         SELECT LAST_INSERT_ID() AS idUsuario;
     ELSE
         INSERT INTO `Usuario` (idUsuario, nombre, apellido, email, pass, saldo)
-        VALUES (xidUsuario, xnombre, xapellido, xemail, xpass, 0.0);
+        VALUES (xidUsuario, xnombre, xapellido, xemail, xpass, xsaldo);
         SELECT xidUsuario AS idUsuario;
     END IF;
 END $$

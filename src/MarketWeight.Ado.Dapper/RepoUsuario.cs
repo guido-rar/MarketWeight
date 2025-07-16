@@ -21,12 +21,13 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
         parametros.Add("@xapellido", usuario.Apellido);
         parametros.Add("@xemail", usuario.Email);
         parametros.Add("@xpass", usuario.Password);
+        parametros.Add("@xsaldo", usuario.Saldo);
 
         try
         {
-            
+
             var id = Conexion.QuerySingle<uint>("AltaUsuario", parametros, commandType: CommandType.StoredProcedure);
-            usuario.idUsuario = id; 
+            usuario.idUsuario = id;
             return usuario;
         }
         catch (DbException e)
