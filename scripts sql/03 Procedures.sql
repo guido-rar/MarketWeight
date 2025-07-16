@@ -10,13 +10,25 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS AltaUsuario $$
-CREATE PROCEDURE `AltaUsuario`(xnombre VARCHAR(45), xapellido  VARCHAR(45), xemail  VARCHAR(45), xpass CHAR(64) )
+CREATE PROCEDURE `AltaUsuario`(
+    IN xidUsuario INT UNSIGNED,
+    IN xnombre VARCHAR(45),
+    IN xapellido VARCHAR(45),
+    IN xemail VARCHAR(45),
+    IN xpass CHAR(64)
+)
 BEGIN
-       INSERT INTO `Usuario` (nombre, apellido, email, pass, saldo)
-              VALUES(xnombre, xapellido, xemail, xpass, 0.0);
-
-       SELECT LAST_INSERT_ID() AS idUsuario;
+    IF xidUsuario IS NULL OR xidUsuario = 0 THEN
+        INSERT INTO `Usuario` (nombre, apellido, email, pass, saldo)
+        VALUES (xnombre, xapellido, xemail, xpass, 0.0);
+        SELECT LAST_INSERT_ID() AS idUsuario;
+    ELSE
+        INSERT INTO `Usuario` (idUsuario, nombre, apellido, email, pass, saldo)
+        VALUES (xidUsuario, xnombre, xapellido, xemail, xpass, 0.0);
+        SELECT xidUsuario AS idUsuario;
+    END IF;
 END $$
+
 
 DROP PROCEDURE IF EXISTS ComprarMoneda $$
 CREATE PROCEDURE `ComprarMoneda`(xidusuario INT UNSIGNED, xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED)

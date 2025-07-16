@@ -16,6 +16,7 @@ public class RepoUsuario : RepoGenerico, IRepoUsuario
     public Usuario Alta(Usuario usuario)
     {
         var parametros = new DynamicParameters();
+        parametros.Add("@xidUsuario", usuario.idUsuario);
         parametros.Add("@xnombre", usuario.Nombre);
         parametros.Add("@xapellido", usuario.Apellido);
         parametros.Add("@xemail", usuario.Email);
