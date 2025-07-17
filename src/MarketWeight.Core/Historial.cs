@@ -7,6 +7,6 @@ namespace MarketWeight.Core
         public required uint idMoneda { get; set; }
         public required decimal Cantidad { get; set; }
         public required bool Compra { get; set; }
-        public required DateTime FechaHora { get; set; }
+        public required DateTime? FechaHora { get; set; }
     }
 }

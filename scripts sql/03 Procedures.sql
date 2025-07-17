@@ -9,8 +9,10 @@ BEGIN
        SELECT LAST_INSERT_ID() AS idMoneda;
 END $$
 
-DROP PROCEDURE IF EXISTS AltaUsuario $$
-CREATE PROCEDURE `AltaUsuario`(
+
+DROP PROCEDURE IF EXISTS AltaUsuario;
+DELIMITER $$
+CREATE PROCEDURE AltaUsuario (
     IN xidUsuario INT UNSIGNED,
     IN xnombre VARCHAR(45),
     IN xapellido VARCHAR(45),
@@ -20,15 +22,30 @@ CREATE PROCEDURE `AltaUsuario`(
 )
 BEGIN
     IF xidUsuario IS NULL OR xidUsuario = 0 THEN
-        INSERT INTO `Usuario` (nombre, apellido, email, pass, saldo)
+        -- Inserta con ID automático
+        INSERT INTO Usuario (nombre, apellido, email, pass, saldo)
         VALUES (xnombre, xapellido, xemail, xpass, xsaldo);
         SELECT LAST_INSERT_ID() AS idUsuario;
     ELSE
-        INSERT INTO `Usuario` (idUsuario, nombre, apellido, email, pass, saldo)
-        VALUES (xidUsuario, xnombre, xapellido, xemail, xpass, xsaldo);
-        SELECT xidUsuario AS idUsuario;
+        -- Verifica si el ID ya existe
+        IF EXISTS (SELECT 1 FROM Usuario WHERE idUsuario = xidUsuario) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = '
+                
+                El ID ya existe. Elegi otro.
+                
+                
+                ';
+        ELSE
+            -- Inserta con el ID recibido
+            INSERT INTO Usuario (idUsuario, nombre, apellido, email, pass, saldo)
+            VALUES (xidUsuario, xnombre, xapellido, xemail, xpass, xsaldo);
+            SELECT xidUsuario AS idUsuario;
+        END IF;
     END IF;
 END $$
+DELIMITER ;
+
 
 
 DROP PROCEDURE IF EXISTS ComprarMoneda $$

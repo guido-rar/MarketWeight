@@ -48,6 +48,92 @@ source Install.sql
 dotnet test -v d
 ```
 
+
+## ⚙️ MinimalAPI
+
+Debés crear un archivo `appSettings.json` dentro de la carpeta `minimalAPI` con el siguiente contenido (reemplazá los datos de conexión con los tuyos):
+
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "MySQL": "Server=localhost;User ID=(TuUsuario);Password=(TuContraseña)!;Database=5to_marketweight;"
+  }
+}
+````
+
+> 🧠 Este archivo es fundamental para que Dapper pueda conectarse a la base de datos correctamente.
+
+---
+
+## 👤 Crear un Usuario
+
+> ⚠️ IMPORTANTE: Al crear un usuario desde Postman, cliente HTTP o frontend, **todos los campos llegan como `null` por defecto**.
+> Por eso, debés **escribir los valores tipo string entre comillas**. Si no, se envían como `null` y no se guarda correctamente.
+
+### ✅ Ejemplo correcto (en formato JSON):
+
+```json
+{
+  "idUsuario": 0,
+  "nombre": "Pepe",
+  "apellido": "Gomez",
+  "email": "pepe@gmail.com",
+  "password": "claveSegura123",
+  "saldo": 153
+}
+```
+
+### ❌ Ejemplo incorrecto:
+
+```json
+{
+  "nombre": Pepe,         // ❌ Faltan comillas
+  "apellido": Gomez,
+  "email": pepe@gmail.com
+}
+```
+
+---
+
+## 🪙 Crear una Moneda
+
+> ⚠️ También en el alta de monedas: **el campo `nombre` debe ir entre comillas**.
+
+### ✅ Ejemplo correcto:
+
+```json
+{
+  "nombre": "PepeCoin",
+  "precio": 10.5
+}
+```
+
+### ❌ Ejemplo incorrecto:
+
+```json
+{
+  "nombre": PepeCoin,   // ❌ Sin comillas
+  "precio": 10.5
+}
+```
+
+---
+
+## 🔐 ID Manual y Error Controlado (Ultimas modificaciones)
+
+* Si se pasa `idUsuario = 0` o `null`, el sistema lo genera automáticamente con `AUTO_INCREMENT`.
+* Si se pasa un `idUsuario` que ya existe, se lanza un error:
+  **"El ID ya existe. Elegí otro."**
+
+---
+
 ## Construido con 🛠️
 
 - C# 12.0
