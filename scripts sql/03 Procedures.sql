@@ -1,17 +1,20 @@
-USE 5to_MarketWeight
+USE 5to_MarketWeight;
 
 DELIMITER $$
-DROP PROCEDURE IF EXISTS AltaCriptoMoneda $$
-CREATE PROCEDURE `AltaCriptoMoneda`(xprecio DECIMAL(20,10), xcantidad DECIMAL(20,10), xnombre VARCHAR(45))
+
+DROP PROCEDURE IF EXISTS AltaCriptoMoneda;
+CREATE PROCEDURE AltaCriptoMoneda(
+    IN xprecio DECIMAL(20,10),
+    IN xcantidad DECIMAL(20,10),
+    IN xnombre VARCHAR(45)
+)
 BEGIN
-       INSERT INTO `Moneda` (precio, cantidad, nombre)
-           VALUES(xprecio, xcantidad, xnombre);
-       SELECT LAST_INSERT_ID() AS idMoneda;
+    INSERT INTO Moneda (precio, cantidad, nombre)
+    VALUES (xprecio, xcantidad, xnombre);
+    SELECT LAST_INSERT_ID() AS idMoneda;
 END $$
 
-
 DROP PROCEDURE IF EXISTS AltaUsuario;
-DELIMITER $$
 CREATE PROCEDURE AltaUsuario (
     IN xidUsuario INT UNSIGNED,
     IN xnombre VARCHAR(45),
@@ -22,132 +25,136 @@ CREATE PROCEDURE AltaUsuario (
 )
 BEGIN
     IF xidUsuario IS NULL OR xidUsuario = 0 THEN
-        -- Inserta con ID automático
         INSERT INTO Usuario (nombre, apellido, email, pass, saldo)
         VALUES (xnombre, xapellido, xemail, xpass, xsaldo);
         SELECT LAST_INSERT_ID() AS idUsuario;
     ELSE
-        -- Verifica si el ID ya existe
         IF EXISTS (SELECT 1 FROM Usuario WHERE idUsuario = xidUsuario) THEN
             SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = '
-                
-                El ID ya existe. Elegi otro.
-                
-                
-                ';
+                SET MESSAGE_TEXT = 'El ID ya existe. Elegí otro.';
         ELSE
-            -- Inserta con el ID recibido
             INSERT INTO Usuario (idUsuario, nombre, apellido, email, pass, saldo)
             VALUES (xidUsuario, xnombre, xapellido, xemail, xpass, xsaldo);
             SELECT xidUsuario AS idUsuario;
         END IF;
     END IF;
 END $$
-DELIMITER ;
 
-
-
-DROP PROCEDURE IF EXISTS ComprarMoneda $$
-CREATE PROCEDURE `ComprarMoneda`(xidusuario INT UNSIGNED, xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED)
+DROP PROCEDURE IF EXISTS ComprarMoneda;
+CREATE PROCEDURE ComprarMoneda(
+    IN xidusuario INT UNSIGNED,
+    IN xcantidad DECIMAL(20,10),
+    IN xidmoneda INT UNSIGNED
+)
 BEGIN
-       START TRANSACTION;
-       IF (PuedeComprar(xidUsuario, xcantidad, xidmoneda))
-       THEN 
-              IF (NOT (EXISTS (
-                     SELECT *
-                     FROM `UsuarioMoneda`
-                     WHERE `idMoneda` = xidmoneda AND `idUsuario` = xidusuario
-                     )))
-                     THEN 
-                            INSERT INTO `UsuarioMoneda` (`idUsuario`, `idMoneda`, cantidad)
-                            VALUES(xidusuario, xidmoneda, 0);
-              END IF;
+    START TRANSACTION;
 
-              UPDATE UsuarioMoneda
-              SET cantidad = cantidad + xcantidad
-              WHERE idMoneda = xidmoneda
-              AND idUsuario = xidusuario;
+    IF (PuedeComprar(xidusuario, xcantidad, xidmoneda)) THEN
+        IF NOT EXISTS (
+            SELECT 1 FROM UsuarioMoneda
+            WHERE idMoneda = xidmoneda AND idUsuario = xidusuario
+        ) THEN
+            INSERT INTO UsuarioMoneda (idUsuario, idMoneda, cantidad)
+            VALUES (xidusuario, xidmoneda, 0);
+        END IF;
 
-              INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
-              VALUES (xidmoneda, xcantidad, NOW(), TRUE, xidusuario);
-       ELSE
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = "Saldo Insuficiente!";
-       END IF;
-       COMMIT;
+        UPDATE UsuarioMoneda
+        SET cantidad = cantidad + xcantidad
+        WHERE idMoneda = xidmoneda AND idUsuario = xidusuario;
+
+        INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
+        VALUES (xidmoneda, xcantidad, NOW(), TRUE, xidusuario);
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Saldo Insuficiente!';
+    END IF;
+
+    COMMIT;
 END $$
 
-DROP PROCEDURE IF EXISTS IngresarDinero $$
-CREATE PROCEDURE `IngresarDinero`(xidUsuario INT UNSIGNED, xsaldo DECIMAL(20,10))
+DROP PROCEDURE IF EXISTS IngresarDinero;
+CREATE PROCEDURE IngresarDinero(
+    IN xidUsuario INT UNSIGNED,
+    IN xsaldo DECIMAL(20,10)
+)
 BEGIN 
     UPDATE Usuario 
     SET saldo = saldo + xsaldo
-    WHERE `idUsuario` = xidUsuario;
+    WHERE idUsuario = xidUsuario;
 END $$
 
-DROP PROCEDURE IF EXISTS VenderMoneda $$
-CREATE PROCEDURE `VenderMoneda`(xidusuario INT UNSIGNED, xcantidad DECIMAL(20,10), xidmoneda INT UNSIGNED)
+DROP PROCEDURE IF EXISTS VenderMoneda;
+CREATE PROCEDURE VenderMoneda(
+    IN xidusuario INT UNSIGNED,
+    IN xcantidad DECIMAL(20,10),
+    IN xidmoneda INT UNSIGNED
+)
 BEGIN
-       IF(PuedeVender(xidusuario, xcantidad, xidmoneda))
-       THEN
-              UPDATE UsuarioMoneda
-              SET cantidad = cantidad - xcantidad
-              WHERE idMoneda = xidmoneda
-              AND idUsuario = xidusuario;
+    IF PuedeVender(xidusuario, xcantidad, xidmoneda) THEN
+        UPDATE UsuarioMoneda
+        SET cantidad = cantidad - xcantidad
+        WHERE idMoneda = xidmoneda AND idUsuario = xidusuario;
 
-              INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
-              VALUES (xidmoneda, xcantidad, NOW(), FALSE, xidusuario);
-       ELSE
-              SIGNAL SQLSTATE '45000'
-              SET MESSAGE_TEXT = "Cantidad Insuficiente!";
-       END IF;
+        INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
+        VALUES (xidmoneda, xcantidad, NOW(), FALSE, xidusuario);
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cantidad Insuficiente!';
+    END IF;
 END $$
 
-DROP PROCEDURE IF EXISTS AltaHistorial $$
-CREATE PROCEDURE `AltaHistorial`(xidMoneda INT UNSIGNED, xcantidad DECIMAL(20,10) UNSIGNED, xcompra TINYINT UNSIGNED, xidUsuario INT UNSIGNED)
+DROP PROCEDURE IF EXISTS AltaHistorial;
+CREATE PROCEDURE AltaHistorial(
+    IN xidMoneda INT UNSIGNED,
+    IN xcantidad DECIMAL(20,10) UNSIGNED,
+    IN xcompra TINYINT UNSIGNED,
+    IN xidUsuario INT UNSIGNED
+)
 BEGIN
-       INSERT INTO `Historial` (idMoneda, cantidad, fechaHora, compra, idUsuario)
-              VALUES(xidMoneda, xcantidad, NOW(), xcompra, xidUsuario);
-       
-       SELECT LAST_INSERT_ID() AS idHistorial;
+    INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
+    VALUES (xidMoneda, xcantidad, NOW(), xcompra, xidUsuario);
+    
+    SELECT LAST_INSERT_ID() AS idHistorial;
 END $$
 
-DROP PROCEDURE IF EXISTS Transferencia $$
-CREATE PROCEDURE `Transferencia`(xidMoneda INT UNSIGNED, xCantidad DECIMAL(20,10) UNSIGNED, xidUsuarioTransfiere INT UNSIGNED, xidUsuarioTransferido INT UNSIGNED)
+DROP PROCEDURE IF EXISTS Transferencia;
+CREATE PROCEDURE Transferencia(
+    IN xidMoneda INT UNSIGNED,
+    IN xCantidad DECIMAL(20,10) UNSIGNED,
+    IN xidUsuarioTransfiere INT UNSIGNED,
+    IN xidUsuarioTransferido INT UNSIGNED
+)
 BEGIN
-       START TRANSACTION;
-       IF (PuedeVender(xidUsuarioTransfiere, xCantidad, xidMoneda))
-       THEN
-              UPDATE UsuarioMoneda
-              SET cantidad = cantidad - xCantidad
-              WHERE idMoneda = xidMoneda
-              AND idUsuario = xidUsuarioTransfiere;
+    START TRANSACTION;
 
-              INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
-              VALUES (xidMoneda, xCantidad, NOW(), NULL, xidUsuarioTransfiere);
-       ELSE
-              SIGNAL SQLSTATE '45000'
-              SET MESSAGE_TEXT = "Cantidad Insuficiente!";
-       END IF;
+    IF PuedeVender(xidUsuarioTransfiere, xCantidad, xidMoneda) THEN
+        UPDATE UsuarioMoneda
+        SET cantidad = cantidad - xCantidad
+        WHERE idMoneda = xidMoneda AND idUsuario = xidUsuarioTransfiere;
 
-       IF (NOT (EXISTS (
-                     SELECT *
-                     FROM `UsuarioMoneda`
-                     WHERE `idMoneda` = xidMoneda AND `idUsuario` = xidUsuarioTransferido
-                     )))
-                     THEN 
-                            INSERT INTO `UsuarioMoneda` (`idUsuario`, `idMoneda`, cantidad)
-                            VALUES(xidUsuarioTransferido, xidMoneda, 0);
-       END IF;
+        INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
+        VALUES (xidMoneda, xCantidad, NOW(), NULL, xidUsuarioTransfiere);
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cantidad Insuficiente!';
+    END IF;
 
+    IF NOT EXISTS (
+        SELECT 1 FROM UsuarioMoneda
+        WHERE idMoneda = xidMoneda AND idUsuario = xidUsuarioTransferido
+    ) THEN
+        INSERT INTO UsuarioMoneda (idUsuario, idMoneda, cantidad)
+        VALUES (xidUsuarioTransferido, xidMoneda, 0);
+    END IF;
 
-              UPDATE UsuarioMoneda
-              SET cantidad = cantidad + xCantidad
-              WHERE idMoneda = xidMoneda
-              AND idUsuario = xidUsuarioTransferido;
+    UPDATE UsuarioMoneda
+    SET cantidad = cantidad + xCantidad
+    WHERE idMoneda = xidMoneda AND idUsuario = xidUsuarioTransferido;
 
-              INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
-              VALUES (xidMoneda, (xCantidad * -1), NOW(), NULL, xidUsuarioTransferido);
-       COMMIT;
+    INSERT INTO Historial (idMoneda, cantidad, fechaHora, compra, idUsuario)
+    VALUES (xidMoneda, (xCantidad * -1), NOW(), NULL, xidUsuarioTransferido);
+
+    COMMIT;
 END $$
+
+DELIMITER ;
