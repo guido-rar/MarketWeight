@@ -4,7 +4,7 @@ using MarketWeight.Core.Persistencia;
 using MySqlConnector;
 using System.Data;
 using Scalar.AspNetCore;
-
+using MinimalAPI.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,14 +30,6 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 // Endpoints para Usuario
-app.MapGet("/usuarios", (IRepoUsuario repo) => repo.Obtener());
-
-app.MapGet("/usuarios/{id:int}", (IRepoUsuario repo, uint id) =>
-{
-    var usuario = repo.Detalle(id);
-    return usuario is not null ? Results.Ok(usuario) : Results.NotFound();
-});
-
 app.MapPost("/usuarios", (IRepoUsuario repo, Usuario usuario) =>
 {
     repo.Alta(usuario);
@@ -59,4 +51,33 @@ app.MapPost("/monedas", (IRepoMoneda repo, Moneda moneda) =>
     return Results.Created($"/monedas/{moneda.Nombre}", moneda);
 });
 
+app.MapGet("/usuarios/{id:int}", async (IRepoUsuario repo, int id) =>
+{
+    var u = await repo.DetalleAsync((uint)id);
+    if (u is null) return Results.NotFound();
+
+    var dto = new UsuarioDTO
+    {
+        IdUsuario = u.idUsuario,
+        Nombre = u.Nombre,
+        Apellido = u.Apellido,
+        Email = u.Email,
+        Saldo = u.Saldo
+    };
+
+    return Results.Ok(dto);
+});
+
+app.MapGet("/usuarios", async (IRepoUsuario repo) =>
+{
+    var usuarios = await repo.ObtenerAsync();
+    return usuarios.Select(u => new UsuarioDTO
+    {
+        IdUsuario = u.idUsuario,
+        Nombre = u.Nombre,
+        Apellido = u.Apellido,
+        Email = u.Email,
+        Saldo = u.Saldo
+    });
+});
 app.Run();
